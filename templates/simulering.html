@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          background-image: url("{{ url_for('static', filename='images/jordan-shooting3.jpg') }}");
+          background-size: cover;
+          background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header_sim">
+        <p id="sim_headerskrift">Simulering</p>
+    </div>
+    <div class="draft_boksmaster">
+        <div class="draft_boks1">
+            <div class="draft_rad1">
+                <p class="draft_spilleretekst">{{ navn_lagA }}</p>
+              </div>
+            <div class="draft_rad2">
+                <p class="draft_spilleretekst">{{lagA.spiller1}}</p>
+            </div>
+            <div class="draft_rad3">
+                <p class="draft_spilleretekst">{{lagA.spiller2}}</p>
+            </div>
+            <div class="draft_rad4">
+                <p class="draft_spilleretekst">{{lagA.spiller3}}</p>
+            </div>
+            <div class="draft_rad5">
+                <p class="draft_spilleretekst">{{lagA.spiller4}}</p>
+            </div>
+            <div class="draft_rad6">
+                <p class="draft_spilleretekst">{{lagA.spiller5}}</p>
+            </div>
+
+        </div>
+        <div class="draft_boks2">
+            <div class="score_boks">
+              <p id="score_tekst">{{ Score_lagA}}-{{ Score_lagB}}</p>
+            </div>
+            <div class="score_knapper">
+              <button class="statistikk_knapp" id="myBtn">statistikk</button>
+              <button class="statistikk_knapp" id="til_ledertavle_knapp">Ledertavle</button>
+
+              <div id="myModal" class="modal">
+
+                  <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h2>Statistikk</h2>
+                      </div>
+                      <div class="modal-body">
+                        <p>{{PGlagA_navn}} {{Poeng_PGlagA}}</p>
+                        <p>{{SGlagA_navn}} {{Poeng_SGlagA}}</p>
+                        <p>{{SFlagA_navn}} {{Poeng_SFlagA}}</p>
+                        <p>{{PFlagA_navn}} {{Poeng_PFlagA}}</p>
+                        <p>{{ClagA_navn}} {{Poeng_ClagA}}</p>
+                        <p>{{PGlagB_navn}} {{Poeng_PGlagB}}</p>
+                        <p>{{SGlagB_navn}} {{Poeng_SGlagB}}</p>
+                        <p>{{SFlagB_navn}} {{Poeng_SFlagB}}</p>
+                        <p>{{PFlagB_navn}} {{Poeng_PFlagB}}</p>
+                        <p>{{ClagB_navn}} {{Poeng_ClagB}}</p>
+                       </div>
+                  </div>
+              </div>   
+            </div> 
+            <div class="referat_boks">
+                <p class="draft_spilleretekst">    <ul>
+                    {% for item in kamplogg %}
+                        <li class="draft_spilleretekst">{{ item }}</li>
+                    {% endfor %}
+                    </ul></p>
+            </div>
+        </div>
+        <div class="draft_boks3">
+            <div class="draft_rad1">
+                <p class="draft_spilleretekst">{{ navn_lagB }}</p>
+              </div>
+              <div class="draft_rad2">
+                <p class="draft_spilleretekst">{{lagB.spiller1}}</p>
+              </div>
+              <div class="draft_rad3">
+                <p class="draft_spilleretekst">{{lagB.spiller2}}</p>
+              </div>
+              <div class="draft_rad4">
+                <p class="draft_spilleretekst">{{lagB.spiller3}}</p>
+              </div>
+              <div class="draft_rad5">
+                <p class="draft_spilleretekst">{{lagB.spiller4}}</p>
+              </div>
+              <div class="draft_rad6">
+                <p class="draft_spilleretekst">{{lagB.spiller5}}</p>
+              </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          }
+        }
+
+        var lederTavleKnapp = document.getElementById("til_ledertavle_knapp");
+
+        lederTavleKnapp.onclick = function(){
+          window.location.href = "/ledertavle";
+        }
+
+
+    </script>
+</body>
+</html>

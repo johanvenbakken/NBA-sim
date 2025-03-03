@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-image: url("{{ url_for('static', filename='images/jordan-knicks.png') }}");
+      background-size: cover;
+      background-position: center;
+    }
+</style>
+<body>
+    <div class="boks_login_signup1"></div>
+    <div class="boks_login_signup2">
+        <form class="login_signup_form" method="POST" action="/signup">
+            <input type="text" name="username" placeholder="Brukernavn" required class="cool_input">
+            <input type="password" name="password" placeholder="Passord" required class="cool_input">
+            <button type="submit" class="button_login_signup">Lag bruker</button>
+        </form>
+        <br>
+        <p class="draft_spilleretekst">Har du allerede en bruker <a href="login">Login</a></p>
+    </div>
+    <div class="boks_login_signup3"></div>
+</body>
+</html>

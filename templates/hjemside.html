@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-image: url("{{ url_for('static', filename='images/jordan-knicks.png') }}");
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+<script>
+    function test(){
+
+        let navn_lagA = document.getElementById("navn_lagA").value
+        let navn_lagB = document.getElementById("navn_lagB").value
+
+        console.log("sucess")
+        fetch('/submit_team_name', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ navn_lagA, navn_lagB })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Success:", data))
+        .catch(error => console.error("Error:", error));
+        window.location.href = "/draft";
+    }
+    
+    function til_login(){
+        window.location.href = "/login";
+    }
+
+    //hvis spillere er logget inn, byttes ut knapper med tekst. 
+    function checkLoginStatus() {
+            fetch('/get_players')
+                .then(response => response.json())
+                .then(data => {
+                    // Check Player 1
+                    if (data.player1 !== "Not logged in") {
+                        document.getElementById("login_knapp_spiller1").style.display = "none"; // Hide button
+                        document.getElementById("welcomeMessage1").style.display = "block"; // Show text
+                        document.getElementById("welcomeMessage1").innerText = `Welcome, ${data.player1} (Player 1)`;
+                    } else {
+                        document.getElementById("login_knapp_spiller1").style.display = "block";
+                        document.getElementById("welcomeMessage1").style.display = "none";
+                    }
+
+                    // Check Player 2
+                    if (data.player2 !== "Not logged in") {
+                        document.getElementById("login_knapp_spiller2").style.display = "none";
+                        document.getElementById("welcomeMessage2").style.display = "block";
+                        document.getElementById("welcomeMessage2").innerText = `Welcome, ${data.player2} (Player 2)`;
+                    } else {
+                        document.getElementById("login_knapp_spiller2").style.display = "block";
+                        document.getElementById("welcomeMessage2").style.display = "none";
+                    }
+                });
+        }
+
+        function til_login(player) {
+            window.location.href = "/login";
+        }
+
+        
+        checkLoginStatus();
+</script>
+<body>
+    <div class="hjemside_bakgrunn">
+        <div class="info_container">
+            <div class="tekst_boks_hjemside">
+                <h1 style="font-size: 2em;" id="info_tekst_hjemside">
+                    Hvordan spille: 
+                    <br>
+                    1. Velg to lagnavn og gå videre
+                    <br>
+                    2. Draft spillere utifra budsjettet
+                    <br>
+                    3. Simuler kampen å se hvem som vinner  
+                </h1>
+                <br>
+                <label for="navn_lagA" class="cool_label">lagnavn lag1</label>
+                <input type="text" id="navn_lagA" class="cool_input">
+
+                <button onclick="til_login()" class="button_login_hjemside" id="login_knapp_spiller1">logg inn spiller 1</button>
+                <p id="welcomeMessage1" style="display: none;" class="info_tekst_hjemside"></p>
+
+                <label for="navn_lagB" class="cool_label">lagnavn lag2</label>
+                <input type="text" id="navn_lagB" class="cool_input">
+                
+                <button onclick="til_login()" class="button_login_hjemside" id="login_knapp_spiller2">logg inn spiller 2</button>
+                <p id="welcomeMessage2" style="display: none;" class="info_tekst_hjemside"></p>
+            </div> 
+            <div class="bilde_hjemside">
+                <img id="logo_bilde" src="{{ url_for('static', filename='images/NBA-logo2.png') }}">
+            </div>
+        </div>
+        <div class="button_container">
+            <button class="button_hjemside" onclick="test()">Get balling</button>
+        </div> 
+    </div>
+</body>
+</html>
