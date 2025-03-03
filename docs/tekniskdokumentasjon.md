@@ -36,9 +36,11 @@ To use NBA-sim follow these steps
 1. **start the application**
 ```sh
 export FLASK_APP=backend.py  
-flask run
+flask run --port 3030
 ```
 2. Open your browser and navigate to `http://localhost:3030`.
+
+PS: (it is not possible right now to create a user, log in or use the leaderboard)
 ## **Architecture**
 NBA-sim is built using the following technologies
 - **Flask**: A lightweight web framework for building backend applications in Python. Flask is used in this project to handle server-side logic, routing, and template rendering.
