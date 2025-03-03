@@ -24,21 +24,33 @@ git clone https://github.com/johanvenbakken/NBA-sim.git
 2. **Navigate to the project directory**
 ```sh
 cd NBA-sim
-````
+```
 
 3. **Install flask**
 ```sh
 pip install flask
 ```
 
+4. **install mariadb**
+```sh
+brew install mariadb
+brew services start mariadb
+```
+
 ## **Usage**
 To use NBA-sim follow these steps
-1. **start the application**
+1. **Set up the database**
+Before starting the application, you need to import the database dump
+```sh
+mysql -u nba_admin -p NBA_sim < database/nba_sim_backup.sql
+```
+
+2. **start the application**
 ```sh
 export FLASK_APP=backend.py  
 flask run --port 3030
 ```
-2. Open your browser and navigate to `http://localhost:3030`.
+3. Open your browser and navigate to `http://localhost:3030`.
 
 PS: (it is not possible right now to create a user, log in or use the leaderboard)
 ## **Architecture**
