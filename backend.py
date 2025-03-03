@@ -19,7 +19,7 @@ def clear_session_on_restart():
 db = mysql.connector.connect(
     host="localhost",
     user="nba_admin",
-    password="pokemon0",
+    password="eplekaker",
     database="NBA_sim",
     charset="utf8mb4",
     collation="utf8mb4_general_ci"
