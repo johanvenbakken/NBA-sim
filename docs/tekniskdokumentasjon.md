@@ -16,9 +16,29 @@ This is the technical documentation for NBA-sim, a project fully developed by Jo
 NBA-sim is a project for those of you who are obbsessed with basketball, or just enjoy watching the game
 
 ## **Installation**
+To install NBA-sim do the following
+1. **Clone the repository**
+```sh
+git clone https://github.com/johanvenbakken/NBA-sim.git
+```
+2. **Navigate to the project directory**
+```sh
+cd NBA-sim
+````
+
+3. **Install flask**
+```sh
+pip install flask
+```
 
 ## **Usage**
-
+To use NBA-sim follow these steps
+1. **start the application**
+```sh
+export FLASK_APP=backend.py  
+flask run
+```
+2. Open your browser and navigate to `http://localhost:3030`.
 ## **Architecture**
 NBA-sim is built using the following technologies
 - **Flask**: A lightweight web framework for building backend applications in Python. Flask is used in this project to handle server-side logic, routing, and template rendering.
