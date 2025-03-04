@@ -50,7 +50,7 @@ basketball_players = {
         {"name": "J Holiday", "attacking": 87, "defensive": 88},
         {"name": "D Mitchell", "attacking": 92, "defensive": 78},
         {"name": "Z LaVine", "attacking": 85, "defensive": 55},
-        {"name": "K Thompson", "attacking": 88, "defensive": 75}  # Replacement for duplicate "A Iverson"
+        {"name": "K Thompson", "attacking": 88, "defensive": 75} 
     ],
     "SF": [
         {"name": "L James", "attacking": 100, "defensive": 90},
@@ -74,7 +74,7 @@ basketball_players = {
         {"name": "J Jackson Jr.", "attacking": 85, "defensive": 80},
         {"name": "B Adebayo", "attacking": 86, "defensive": 85},
         {"name": "P Siakam", "attacking": 75, "defensive": 60},
-        {"name": "Z Randolph", "attacking": 80, "defensive": 72}  # Replacement for duplicate "J Isaac"
+        {"name": "Z Randolph", "attacking": 80, "defensive": 72}  
     ],
     "C": [
         {"name": "K Abdul-Jabbar", "attacking": 100, "defensive": 92},
@@ -86,7 +86,7 @@ basketball_players = {
         {"name": "D Robinson", "attacking": 90, "defensive": 85},
         {"name": "A Mourning", "attacking": 85, "defensive": 88},
         {"name": "D Howard", "attacking": 70, "defensive": 75},
-        {"name": "J Embiid", "attacking": 92, "defensive": 85}  # Replacement for duplicate "R Gobert"
+        {"name": "J Embiid", "attacking": 92, "defensive": 85}
     ]
 }
 
