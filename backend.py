@@ -208,226 +208,244 @@ def simulering():
     navn_lagA = session.get('navn_lagA', " ")
     navn_lagB = session.get('navn_lagB', " ")
 
+
+    positions = ["PG", "SG", "SF", "PF", "C"]
+
     # For lagA
-    for player in basketball_players["PG"]:
-        if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
-            PGlagA = player
+    lagA_players = {position: None for position in positions}
+    for position in positions:
+        for player in basketball_players[position]:
+            if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
+                lagA_players[position] = player
 
-    for player in basketball_players["SG"]:
-        if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
-            SGlagA = player
-
-    for player in basketball_players["SF"]:
-        if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
-            SFlagA = player
-
-    for player in basketball_players["PF"]:
-        if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
-            PFlagA = player
-
-    for player in basketball_players["C"]:
-        if player['name'] in (lagA['spiller1'], lagA['spiller2'], lagA['spiller3'], lagA['spiller4'], lagA['spiller5']):
-            ClagA = player
+    PGlagA, SGlagA, SFlagA, PFlagA, ClagA = (lagA_players[pos] for pos in positions)
 
     # For lagB
-    for player in basketball_players["PG"]:
-        if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
-            PGlagB = player
+    lagB_players = {position: None for position in positions}
+    for position in positions:
+        for player in basketball_players[position]:
+            if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
+                lagB_players[position] = player
 
-    for player in basketball_players["SG"]:
-        if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
-            SGlagB = player
+    PGlagB, SGlagB, SFlagB, PFlagB, ClagB = (lagB_players[pos] for pos in positions)
 
-    for player in basketball_players["SF"]:
-        if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
-            SFlagB = player
+    if 'Score_lagA' in session and 'Score_lagB' in session and 'player_points' in session:
+        Score_lagA = session['Score_lagA']
+        Score_lagB = session['Score_lagB']
+        kamplogg = session['kamplogg']
+        player_points = session['player_points']
+        PGlagA_navn = PGlagA['name']
+        SGlagA_navn = SGlagA['name']
+        SFlagA_navn = SFlagA['name']
+        PFlagA_navn = PFlagA['name']
+        ClagA_navn = ClagA['name']
+        PGlagB_navn = PGlagB['name']
+        SGlagB_navn = SGlagB['name']
+        SFlagB_navn = SFlagB['name']
+        PFlagB_navn = PFlagB['name']
+        ClagB_navn = ClagB['name']
+    else:
+        Score_lagA = 0
+        Score_lagB = 0
+        kamplogg = []
 
-    for player in basketball_players["PF"]:
-        if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
-            PFlagB = player
+        player_points = {
+            'PGlagA': 0, 'SGlagA': 0, 'SFlagA': 0, 'PFlagA': 0, 'ClagA': 0,
+            'PGlagB': 0, 'SGlagB': 0, 'SFlagB': 0, 'PFlagB': 0, 'ClagB': 0
+        }
 
-    for player in basketball_players["C"]:
-        if player['name'] in (lagB['spiller1'], lagB['spiller2'], lagB['spiller3'], lagB['spiller4'], lagB['spiller5']):
-            ClagB = player
-    kamplogg = []
+        PGlagA_navn = PGlagA['name']
+        SGlagA_navn = SGlagA['name']
+        SFlagA_navn = SFlagA['name']
+        PFlagA_navn = PFlagA['name']
+        ClagA_navn = ClagA['name']
+        PGlagB_navn = PGlagB['name']
+        SGlagB_navn = SGlagB['name']
+        SFlagB_navn = SFlagB['name']
+        PFlagB_navn = PFlagB['name']
+        ClagB_navn = ClagB['name']
 
-    Score_lagA = 0
-    Score_lagB = 0
+        antall_spill = random.randint(80, 200)
+        while antall_spill > 0:
+            spill_poisjon = random.randint(1,5)
+            if spill_poisjon == 1:
+                if antall_spill%2 == 0:
+                    angrep = PGlagA["attacking"]
+                    forsvar = int(PGlagB["defensive"]-40)
 
-    Poeng_PGlagA = 0
-    Poeng_SGlagA = 0
-    Poeng_SFlagA = 0
-    Poeng_PFlagA = 0
-    Poeng_ClagA = 0
-    Poeng_PGlagB = 0
-    Poeng_SGlagB = 0
-    Poeng_SFlagB = 0
-    Poeng_PFlagB = 0
-    Poeng_ClagB = 0
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        måltype = random.randint(1,3)
+                        if måltype == 1:
+                            kamplogg.append(f"{PGlagA['name']} skyter over {PGlagB['name']} og scorer")
+                            Score_lagA += 3
+                            player_points['PGlagA'] += 3
+                        else:
+                            kamplogg.append(f"{PGlagA['name']} driver forbi {PGlagB['name']} og setter layupen")
+                            Score_lagA += 2
+                            player_points['PGlagA'] += 2
+                    else:
+                        kamplogg.append(f"{PGlagB['name']} stjeler ballen fra {PGlagA['name']} og starter et nytt angrep")
+                    
+                elif antall_spill%2 == 1:
+                    angrep = PGlagB["attacking"]
+                    forsvar = int(PGlagA["defensive"]-40)
 
-    PGlagA_navn = PGlagA['name']
-    SGlagA_navn = SGlagA['name']
-    SFlagA_navn = SFlagA['name']
-    PFlagA_navn = PFlagA['name']
-    ClagA_navn = ClagA['name']
-    PGlagB_navn = PGlagB['name']
-    SGlagB_navn = SGlagB['name']
-    SFlagB_navn = SFlagB['name']
-    PFlagB_navn = PFlagB['name']
-    ClagB_navn = ClagB['name']
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        måltype = random.randint(1,3)
+                        if måltype == 1:
+                            kamplogg.append(f"{PGlagB['name']} skyter over {PGlagA['name']} og scorer")
+                            Score_lagB += 3
+                            player_points['PGlagB'] += 3
+                        else:
+                            kamplogg.append(f"{PGlagB['name']} driver forbi {PGlagA['name']} og setter layupen")
+                            Score_lagB += 2
+                            player_points['PGlagB'] += 2
+                    else:
+                        kamplogg.append(f"{PGlagA['name']} stjeler ballen fra {PGlagB['name']} og starter et nytt angrep")
+            elif spill_poisjon == 2:
+                if antall_spill%2 == 0:
+                    angrep = SGlagA["attacking"]
+                    forsvar = int(SGlagB["defensive"]-40)
 
-    antall_spill = random.randint(80, 200)
-    while antall_spill > 0:
-        spill_poisjon = random.randint(1,5)
-        if spill_poisjon == 1:
-            if antall_spill%2 == 0:
-                angrep = PGlagA["attacking"]
-                forsvar = int(PGlagB["defensive"]-40)
-
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    måltype = random.randint(1,3)
-                    if måltype == 1:
-                        kamplogg.append(f"{PGlagA['name']} skyter over {PGlagB['name']} og scorer")
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{SGlagA['name']} skyter en 3-er over {SGlagB['name']} og scorer")
                         Score_lagA += 3
-                        Poeng_PGlagA += 3
+                        player_points['SGlagA'] += 3
                     else:
-                        kamplogg.append(f"{PGlagA['name']} driver forbi {PGlagB['name']} og setter layupen")
-                        Score_lagA += 2
-                        Poeng_PGlagA += 2
-                else:
-                    kamplogg.append(f"{PGlagB['name']} stjeler ballen fra {PGlagA['name']} og starter et nytt angrep")
-                
-            elif antall_spill%2 == 1:
-                angrep = PGlagB["attacking"]
-                forsvar = int(PGlagA["defensive"]-40)
+                        kamplogg.append(f"{SGlagB['name']} blokkerer skuddet til {SGlagA['name']} og spiller ballen fram")
+                elif antall_spill%2 == 1:
+                    angrep = SGlagB["attacking"]
+                    forsvar = int(SGlagA["defensive"]-40)
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    måltype = random.randint(1,3)
-                    if måltype == 1:
-                        kamplogg.append(f"{PGlagB['name']} skyter over {PGlagA['name']} og scorer")
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{SGlagB['name']} skyter en 3-er over {SGlagA['name']} og scorer")
                         Score_lagB += 3
-                        Poeng_PGlagB += 3
+                        player_points['SGlagB'] += 3
                     else:
-                        kamplogg.append(f"{PGlagB['name']} driver forbi {PGlagA['name']} og setter layupen")
-                        Score_lagB += 2
-                        Poeng_PGlagB += 2
-                else:
-                    kamplogg.append(f"{PGlagA['name']} stjeler ballen fra {PGlagB['name']} og starter et nytt angrep")
-        elif spill_poisjon == 2:
-            if antall_spill%2 == 0:
-                angrep = SGlagA["attacking"]
-                forsvar = int(SGlagB["defensive"]-40)
+                        kamplogg.append(f"{SGlagA['name']} blokkerer {SGlagB['name']} og spiller ballen fram")
+            elif spill_poisjon == 3:
+                if antall_spill%2 == 0:
+                    angrep = SFlagA["attacking"]
+                    forsvar = int(SFlagB["defensive"]-40)
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{SGlagA['name']} skyter en 3-er over {SGlagB['name']} og scorer")
-                    Score_lagA += 3
-                    Poeng_SGlagA += 3
-                else:
-                    kamplogg.append(f"{SGlagB['name']} blokkerer skuddet til {SGlagA['name']} og spiller ballen fram")
-            elif antall_spill%2 == 1:
-                angrep = SGlagB["attacking"]
-                forsvar = int(SGlagA["defensive"]-40)
-
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{SGlagB['name']} skyter en 3-er over {SGlagA['name']} og scorer")
-                    Score_lagB += 3
-                    Poeng_SGlagB += 3
-                else:
-                    kamplogg.append(f"{SGlagA['name']} blokkerer {SGlagB['name']} og spiller ballen fram")
-        elif spill_poisjon == 3:
-            if antall_spill%2 == 0:
-                angrep = SFlagA["attacking"]
-                forsvar = int(SFlagB["defensive"]-40)
-
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{SFlagA['name']} setter ned {SFlagB['name']} og scorer")
-                    mål_type = random.randint(1,5)
-                    if mål_type == 1:
-                        Score_lagA += 3
-                        Poeng_SFlagA += 3
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{SFlagA['name']} setter ned {SFlagB['name']} og scorer")
+                        mål_type = random.randint(1,5)
+                        if mål_type == 1:
+                            Score_lagA += 3
+                            player_points['SFlagA'] += 3
+                        else:
+                            Score_lagA += 2
+                            player_points['SFlagA'] += 2
                     else:
+                        kamplogg.append(f"{SFlagB['name']} tar ballen fra {SFlagA['name']} og dribbler oppover")
+                elif antall_spill%2 == 1:
+                    angrep = SFlagB["attacking"]
+                    forsvar = int(SGlagA["defensive"]-40)
+
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{SFlagB['name']} setter ned {SFlagA['name']} og scorer")
+                        mål_type = random.randint(1,5)
+                        if mål_type == 1:
+                            Score_lagB += 3
+                            player_points['SFlagB'] += 3
+                        else:
+                            Score_lagB += 2
+                            player_points['SFlagB'] += 2
+                    else:
+                        kamplogg.append(f"{SFlagA['name']} tar ballen fra {SFlagB['name']} og dribbler oppover")
+            elif spill_poisjon == 4:
+                if antall_spill%2 == 0:
+                    angrep = PFlagA["attacking"]
+                    forsvar = int(PFlagB["defensive"]-40)
+
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{PFlagA['name']} finter ut {PFlagB['name']} og scorer")
                         Score_lagA += 2
-                        Poeng_SFlagA += 2
-                else:
-                    kamplogg.append(f"{SFlagB['name']} tar ballen fra {SFlagA['name']} og dribbler oppover")
-            elif antall_spill%2 == 1:
-                angrep = SFlagB["attacking"]
-                forsvar = int(SGlagA["defensive"]-40)
-
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{SFlagB['name']} setter ned {SFlagA['name']} og scorer")
-                    mål_type = random.randint(1,5)
-                    if mål_type == 1:
-                        Score_lagB += 3
-                        Poeng_SFlagB += 3
+                        player_points['PFlagA'] += 2
                     else:
+                        kamplogg.append(f"{PFlagB['name']} stjeler ballen fra {PFlagA['name']} og spiller ballen fra seg")
+                elif antall_spill%2 == 1:
+                    angrep = PFlagB["attacking"]
+                    forsvar = int(PFlagA["defensive"]-40)
+
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{PFlagB['name']} finter ut {PFlagA['name']} og scorer")
                         Score_lagB += 2
-                        Poeng_SFlagB += 2
-                else:
-                    kamplogg.append(f"{SFlagA['name']} tar ballen fra {SFlagB['name']} og dribbler oppover")
-        elif spill_poisjon == 4:
-            if antall_spill%2 == 0:
-                angrep = PFlagA["attacking"]
-                forsvar = int(PFlagB["defensive"]-40)
+                        player_points['PFlagB'] += 2
+                    else:
+                        kamplogg.append(f"{PFlagA['name']} stjeler ballen fra {PFlagB['name']} og spiller ballen fra seg")
+            elif spill_poisjon == 5:
+                if antall_spill%2 == 0:
+                    angrep = ClagA["attacking"]
+                    forsvar = int(ClagB["defensive"]-40)
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{PFlagA['name']} finter ut {PFlagB['name']} og scorer")
-                    Score_lagA += 2
-                    Poeng_PFlagA += 2
-                else:
-                    kamplogg.append(f"{PFlagB['name']} stjeler ballen fra {PFlagA['name']} og spiller ballen fra seg")
-            elif antall_spill%2 == 1:
-                angrep = PFlagB["attacking"]
-                forsvar = int(PFlagA["defensive"]-40)
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{ClagA['name']} dunker på {ClagB['name']}")
+                        Score_lagA += 2
+                        player_points['ClagA'] += 2
+                    else:
+                        kamplogg.append(f"{ClagB['name']} vinner rebound mot {ClagA['name']} og spiller ballen fra seg")
+                elif antall_spill%2 == 1:
+                    angrep = ClagB["attacking"]
+                    forsvar = int(ClagA["defensive"]-40)
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{PFlagB['name']} finter ut {PFlagA['name']} og scorer")
-                    Score_lagB += 2
-                    Poeng_PFlagB += 2
-                else:
-                    kamplogg.append(f"{PFlagA['name']} stjeler ballen fra {PFlagB['name']} og spiller ballen fra seg")
-        elif spill_poisjon == 5:
-            if antall_spill%2 == 0:
-                angrep = ClagA["attacking"]
-                forsvar = int(ClagB["defensive"]-40)
+                    tall_for_sim = random.randint(1, angrep + forsvar)
+                    if tall_for_sim <= angrep:
+                        kamplogg.append(f"{ClagB['name']} dunker på {ClagA['name']}")
+                        Score_lagB += 2
+                        player_points['ClagB'] += 2
+                    else:
+                        kamplogg.append(f"{ClagA['name']} vinner rebound mot {ClagB['name']} og spiller ballen fra seg")
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{ClagA['name']} dunker på {ClagB['name']}")
-                    Score_lagA += 2
-                    Poeng_ClagA += 2
-                else:
-                    kamplogg.append(f"{ClagB['name']} vinner rebound mot {ClagA['name']} og spiller ballen fra seg")
-            elif antall_spill%2 == 1:
-                angrep = ClagB["attacking"]
-                forsvar = int(ClagA["defensive"]-40)
+            antall_spill -= 1
+            if antall_spill == 0:
+                kamplogg.append(f"Tiden er ute, sluttstilling {Score_lagA} - {Score_lagB}")    
 
-                tall_for_sim = random.randint(1, angrep + forsvar)
-                if tall_for_sim <= angrep:
-                    kamplogg.append(f"{ClagB['name']} dunker på {ClagA['name']}")
-                    Score_lagB += 2
-                    Poeng_ClagB += 2
-                else:
-                    kamplogg.append(f"{ClagA['name']} vinner rebound mot {ClagB['name']} og spiller ballen fra seg")
+            session['Score_lagA'] = Score_lagA
+            session['Score_lagB'] = Score_lagB
+            session['kamplogg'] = kamplogg
+            session['player_points'] = player_points
 
-        antall_spill -= 1
-        if antall_spill == 0:
-            kamplogg.append(f"Tiden er ute, sluttstilling {Score_lagA} - {Score_lagB}")    
-
-    return render_template('simulering.html', lagA = lagA, lagB = lagB, Score_lagA = Score_lagA, Score_lagB = Score_lagB, kamplogg = kamplogg, 
-                           Poeng_PGlagA = Poeng_PGlagA, Poeng_SGlagA = Poeng_SGlagA, Poeng_SFlagA = Poeng_SFlagA, Poeng_PFlagA = Poeng_PFlagA,
-                           Poeng_ClagA = Poeng_ClagA, Poeng_PGlagB = Poeng_PGlagB, Poeng_SGlagB = Poeng_SGlagB, Poeng_SFlagB = Poeng_SFlagB, Poeng_PFlagB =Poeng_PFlagB,
-                           Poeng_ClagB = Poeng_ClagB, PGlagA_navn = PGlagA_navn, SGlagA_navn = SGlagA_navn, SFlagA_navn = SFlagA_navn, PFlagA_navn = PFlagA_navn,
-                           ClagA_navn = ClagA_navn, PGlagB_navn = PGlagB_navn, SGlagB_navn = SGlagB_navn, SFlagB_navn = SFlagB_navn, PFlagB_navn = PFlagB_navn, ClagB_navn = ClagB_navn,
-                           navn_lagA = navn_lagA, navn_lagB = navn_lagB)
+    return render_template(
+        'simulering.html',
+        lagA=lagA, 
+        lagB=lagB, 
+        Score_lagA=Score_lagA, 
+        Score_lagB=Score_lagB, 
+        kamplogg=kamplogg,
+        Poeng_PGlagA=player_points['PGlagA'], 
+        Poeng_SGlagA=player_points['SGlagA'], 
+        Poeng_SFlagA=player_points['SFlagA'], 
+        Poeng_PFlagA=player_points['PFlagA'], 
+        Poeng_ClagA=player_points['ClagA'], 
+        Poeng_PGlagB=player_points['PGlagB'], 
+        Poeng_SGlagB=player_points['SGlagB'], 
+        Poeng_SFlagB=player_points['SFlagB'], 
+        Poeng_PFlagB=player_points['PFlagB'], 
+        Poeng_ClagB=player_points['ClagB'], 
+        PGlagA_navn=PGlagA_navn, 
+        SGlagA_navn=SGlagA_navn, 
+        SFlagA_navn=SFlagA_navn, 
+        PFlagA_navn=PFlagA_navn, 
+        ClagA_navn=ClagA_navn, 
+        PGlagB_navn=PGlagB_navn, 
+        SGlagB_navn=SGlagB_navn, 
+        SFlagB_navn=SFlagB_navn, 
+        PFlagB_navn=PFlagB_navn, 
+        ClagB_navn=ClagB_navn,
+        navn_lagA=navn_lagA, 
+        navn_lagB=navn_lagB
+    )
 
 if __name__ == '__main__':
     app.run(debug=True, port=3030)
