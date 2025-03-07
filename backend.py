@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response
 import random
 import mysql.connector
 import bcrypt
@@ -92,7 +92,15 @@ basketball_players = {
 
 @app.route('/')
 def hjemside():
-    return render_template('hjemside.html')
+    cookies_accepted = request.cookies.get('cookiesAccepted')
+    return render_template('hjemside.html', cookies_accepted = cookies_accepted)
+
+@app.route("/accept-cookies")
+def accept_cookies():
+    response = make_response("Cookies Accepted")
+    response.set_cookie("cookiesAccepted", "true", max_age=60*60*24*365)  # 1 year
+    return response
+
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -117,33 +125,39 @@ def signup():
         return f"Logging in with {username}"
     return render_template("signup.html")
 
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
+        # Example DB query (adjust as needed)
         query = "SELECT passord FROM Brukere WHERE brukernavn = %s"
         values = (username, )
         cursor.execute(query, values)
-        user = cursor.fetchone() 
+        user = cursor.fetchone()
 
-        if not user:  
-            return "bruker ikke funnet", 401
+        if not user:
+            return "Bruker ikke funnet", 401  # User not found
         
         stored_hashed_password = user[0]
 
         if bcrypt.checkpw(password.encode(), stored_hashed_password.encode()):
+            response = make_response(redirect(url_for('hjemside')))
+
             if "player1" not in session:
                 session["player1"] = username
-                return redirect(url_for('hjemside'))
+                response.set_cookie("username", username, max_age=60*60*24)  # Save cookie for 1 day
             elif "player2" not in session:
                 session["player2"] = username
-                return redirect(url_for('hjemside'))
+                response.set_cookie("username", username, max_age=60*60*24)
             else:
                 return "Maks spillegrense nådd"
-        
-    return render_template("login.html")
+
+            return response  # Redirect with cookie stored
+
+    return render_template("login.html")  # Show login page for GET requests
 
 @app.route('/get_players')
 def get_players():
@@ -171,6 +185,10 @@ def draft():
     navn_lagB = session.get('navn_lagB', " ")
 
     return render_template('draft.html', navn_lagA = navn_lagA, navn_lagB = navn_lagB)
+
+@app.route('/privacy-policy')
+def privpoli():
+    return render_template('privacy-policy.html')
 
 @app.route('/submit', methods=['POST'])
 def submit_teams():

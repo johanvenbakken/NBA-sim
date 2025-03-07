@@ -71,8 +71,25 @@
 
         
         checkLoginStatus();
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const cookieOverlay = document.getElementById("cookie-overlay");
+        const acceptButton = document.getElementById("accept-cookies");
+
+        if (acceptButton) {
+            acceptButton.addEventListener("click", function () {
+                fetch("/accept-cookies") // Call Flask route
+                    .then(() => {
+                        cookieOverlay.style.display = "none"; // Hide popup
+                        document.body.classList.remove("no-interaction"); // Enable clicks
+                    })
+                    .catch(err => console.error("Error:", err));
+            });
+        }
+    });
 </script>
-<body>
+<body class="{% if not cookies_accepted %}no-interaction{% endif %}">
+
     <div class="hjemside_bakgrunn">
         <div class="info_container">
             <div class="tekst_boks_hjemside">
@@ -104,7 +121,15 @@
         </div>
         <div class="button_container">
             <button class="button_hjemside" onclick="test()">Get balling</button>
-        </div> 
-    </div>
+        </div>
+        {% if not cookies_accepted %}
+            <div id="cookie-overlay">
+                <div class="cookie-container">
+                    <p>We use cookies to improve your experience. <a href="privacy-policy">Learn more</a></p>
+                    <button id="accept-cookies">Accept</button>
+                </div>
+            </div>
+        {% endif %}
+        </div>
 </body>
 </html>

@@ -428,3 +428,78 @@ li {
     width: 64%;
     height: 100%;
 }
+
+/* Prevent interaction until cookies are accepted */
+.no-interaction {
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Cookie overlay to block interactions */
+#cookie-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dim background */
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    align-items: flex-end; /* Align to bottom */
+    pointer-events: auto;
+}
+
+/* Cookie Popup */
+.cookie-container {
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 1.5em;
+    border-radius: 0.5em;
+    font-size: 1em;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.3);
+    max-width: 25em;
+    margin: 1.5em; /* Spacing from bottom and right */
+    min-height: 8em;
+}
+
+/* Cookie link */
+.cookie-container a {
+    color: #FFD700;
+    text-decoration: none;
+}
+
+/* Accept button */
+.cookie-container button {
+    margin-top: 0.5em;
+    background: #FFD700;
+    border: none;
+    color: black;
+    padding: 0.5em 1em;
+    border-radius: 0.3em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.cookie-container button:hover {
+    background: #FFC107;
+}
+
+
+.pp-containers{
+    width: 100%;
+    height: 100%;
+    background-color: #f9faff;
+    display: flex;
+    flex-direction: row;
+}
+.pp-1, .pp-3{
+    width: 30%;
+    height: 100%;
+}
+
+.pp-2 {
+    width: 40%;
+    height: 100%;
+    margin-top: 2em;
+}
