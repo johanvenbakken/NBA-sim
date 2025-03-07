@@ -429,27 +429,24 @@ li {
     height: 100%;
 }
 
-/* Prevent interaction until cookies are accepted */
 .no-interaction {
     pointer-events: none;
     overflow: hidden;
 }
 
-/* Cookie overlay to block interactions */
 #cookie-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Dim background */
+    background: rgba(0, 0, 0, 0.4); 
     display: flex;
-    justify-content: flex-end; /* Align to right */
-    align-items: flex-end; /* Align to bottom */
+    justify-content: flex-end; 
+    align-items: flex-end;
     pointer-events: auto;
 }
 
-/* Cookie Popup */
 .cookie-container {
     background: rgba(0, 0, 0, 0.85);
     color: white;
@@ -458,11 +455,10 @@ li {
     font-size: 1em;
     box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.3);
     max-width: 25em;
-    margin: 1.5em; /* Spacing from bottom and right */
+    margin: 1.5em; 
     min-height: 8em;
 }
 
-/* Cookie link */
 .cookie-container a {
     color: #FFD700;
     text-decoration: none;
@@ -488,14 +484,14 @@ li {
 
 .pp-containers{
     width: 100%;
-    height: 100%;
+    height: 200vh;
     background-color: #f9faff;
     display: flex;
     flex-direction: row;
 }
 .pp-1, .pp-3{
     width: 30%;
-    height: 100%;
+    height: 200vh;
 }
 
 .pp-2 {
@@ -503,3 +499,32 @@ li {
     height: 100%;
     margin-top: 2em;
 }
+
+#privacy-policy_text{
+    line-height: 160%;
+    font-size: large;
+    letter-spacing: 2px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+td:first-child {
+    font-weight: bold;
+    background-color: #f8f8f8;
+}
+tr:nth-child(even) td:first-child {
+    background-color: #e8e8e8;
+}
+  
