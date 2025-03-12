@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 50px;
+        }
+        .error-container {
+            font-size: 100px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .error-container img {
+            width: 13%; /* Adjust size as needed */
+            height: 13%;
+            object-fit: contain; /* Ensures the image keeps its aspect ratio */
+            display: block; /* Prevents extra space issues */
+        }
+        p {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <span style="font-family: Bulls-NBA;">4</span>
+        <img src="{{ url_for('static', filename='images/basketball-404.png') }}" alt="Basketball">
+        <span style="font-family: Bulls-NBA;">4</span>
+    </div>
+    <p>Oops! The page you're looking for doesn't exist.</p>
+    <a href="/">Go Home</a>
+</body>
+</html>
