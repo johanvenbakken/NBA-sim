@@ -1,9 +1,35 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response
 import random
-import mysql.connector
 import bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):
+  pass
+
+
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://nba_admin:eplekaker@localhost/NBA_sim"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+
+# Define User model
+class User(db.Model):
+    __tablename__ = "Brukere"  # Match your database table name
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    brukernavn = db.Column(db.String(50), unique=True, nullable=False)
+    passord = db.Column(db.String(255), nullable=False)
+
+# Define Leaderboard model
+class Leaderboard(db.Model):
+    __tablename__ = "Lederbord"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("Brukere.id"), primary_key=True)
+    antall_seire = db.Column(db.Integer, default=0)
+
 app.secret_key = 'bananer'
 
 first_request = True
@@ -15,17 +41,6 @@ def clear_session_on_restart():
     if first_request:
         session.clear()
         first_request = False
-
-db = mysql.connector.connect(
-    host="localhost",
-    user="nba_admin",
-    password="eplekaker",
-    database="NBA_sim",
-    charset="utf8mb4",
-    collation="utf8mb4_general_ci"
-)
-
-cursor = db.cursor(buffered=True)
 
 basketball_players = {
     "PG": [
@@ -107,27 +122,32 @@ def accept_cookies():
     return response
 
 
+
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
-        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-    
-        query = "INSERT INTO Brukere (brukernavn, passord) VALUES (%s, %s)"
-        values = (username, hashed_password.decode())
+        # Hash password
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-        cursor.execute(query, values)
-        db.commit()
+ 
+        new_user = User(brukernavn=username, passord=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()  # Save user to database
 
-        user_id = cursor.lastrowid  
+        # Get newly created user ID
+        user_id = new_user.id
 
-        cursor.execute("INSERT INTO Lederbord (user_id, antall_seire) VALUES (%s, 0)", (user_id,))
-        db.commit()
+        # Add to Leaderboard
+        new_entry = Leaderboard(user_id=user_id, antall_seire=0)
+        db.session.add(new_entry)
+        db.session.commit()
 
         print("Ny bruker registrert")
         return f"Logging in with {username}"
+
     return render_template("signup.html")
 
 
@@ -138,15 +158,12 @@ def login():
         password = request.form["password"]
 
         # Example DB query (adjust as needed)
-        query = "SELECT passord FROM Brukere WHERE brukernavn = %s"
-        values = (username, )
-        cursor.execute(query, values)
-        user = cursor.fetchone()
+        user = User.query.filter_by(brukernavn=username).first()
 
         if not user:
             return "Bruker ikke funnet", 401  # User not found
         
-        stored_hashed_password = user[0]
+        stored_hashed_password = user.passord
 
         if bcrypt.checkpw(password.encode(), stored_hashed_password.encode()):
             response = make_response(redirect(url_for('hjemside')))
@@ -212,15 +229,12 @@ def submit_teams():
 
 @app.route('/ledertavle')
 def ledertavle():
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT Brukere.brukernavn, Lederbord.antall_seire
-        FROM Lederbord
-        JOIN Brukere ON Lederbord.user_id = Brukere.id
-        ORDER BY Lederbord.antall_seire DESC;
-    """)
-    rows = cursor.fetchall()
-    cursor.close()
+    rows = db.session.query(User.brukernavn, Leaderboard.antall_seire) \
+                     .join(Leaderboard, Leaderboard.user_id == User.id) \
+                     .order_by(Leaderboard.antall_seire.asc()) \
+                     .all()
+                                            
+    
     return render_template("ledertavle.html", rows = rows)
 
 @app.route('/simulering')
