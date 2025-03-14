@@ -1,0 +1,28 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Integer, String
+
+class Base(DeclarativeBase):
+  pass
+
+db = SQLAlchemy(model_class=Base)
+
+app = Flask(__name__)
+
+# Configure MySQL database
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://nba_admin:eplekaker@localhost/NBA_sim"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Initialize the app with SQLAlchemy
+db.init_app(app)
+
+class User(db.Model):
+    __tablename__ = "Brukere"  # Change this if the actual table name is different
+
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
+    brukernavn = db.Column(String(50), nullable=True)  # Matches VARCHAR(50), NULL allowed
+    passord = db.Column(String(255), nullable=True)  # Matches VARCHAR(255), NULL allowed
+
+    def __repr__(self):
+        return f"<User id={self.id} brukernavn={self.brukernavn}>"
