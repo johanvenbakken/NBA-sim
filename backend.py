@@ -268,7 +268,6 @@ def simulering():
         PFlagB_navn = PFlagB['name']
         ClagB_navn = ClagB['name']
     else:
-        Game_completed = False
         Score_lagA = 0
         Score_lagB = 0
         kamplogg = []
@@ -439,41 +438,6 @@ def simulering():
             session['Score_lagB'] = Score_lagB
             session['kamplogg'] = kamplogg
             session['player_points'] = player_points
-
-        if Game_completed == False:
-            if "player1" in session:
-                if Score_lagA > Score_lagB:
-                    brukernavn = session["player1"]
-                    cursor = db.cursor(buffered=True)
-
-                    query = """
-                        UPDATE lederbord 
-                        SET (SELECT antall_seire FROM lederbord WHERE user_id= (SELECT id FROM brukere WHERE brukernavn = %s)) + 1 
-                        WHERE user_id = (SELECT id FROM brukere WHERE brukernavn = %s)
-                    """  # ✅ Fixed: Closing triple quotes in the right place!
-
-                    cursor.execute(query, (brukernavn))
-                    db.commit()  # Save the changes
-                    cursor.close()
-
-            elif "player2" in session:
-                if Score_lagB > Score_lagA:
-                    brukernavn = session["player2"]
-                    cursor = db.cursor(buffered=True)
-
-                    query = """
-                        UPDATE lederbord 
-                        SET antall_seire = antall_seire + 1 
-                        WHERE user_id = (SELECT id FROM brukere WHERE brukernavn = %s)
-                    """  # ✅ Fixed
-
-                    cursor.execute(query, (brukernavn))
-                    db.commit()  # Save the changes
-                    cursor.close()
-        else:
-            pass  # Skip if game is already completed
-
-        Game_completed = True
 
 
     
