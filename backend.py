@@ -17,11 +17,14 @@ db = SQLAlchemy(app)
 
 # Define User model
 class User(db.Model):
-    __tablename__ = "Brukere"  # Match your database table name
+    __tablename__ = "Brukere"  # Matches your database table name
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     brukernavn = db.Column(db.String(50), unique=True, nullable=False)
     passord = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    dato_registrert = db.Column(db.Date, nullable=False, server_default=db.func.curdate())  # Matches `curdate()`
+
 
 # Define Leaderboard model
 class Leaderboard(db.Model):
@@ -109,6 +112,16 @@ basketball_players = {
 def page_not_found(e):
     return render_template("404.html"), 404 
 
+@app.route('/clear-session')
+def clear_session():
+
+    keys_to_keep = {"username1", "username2"}  # Adjust this based on how you track login
+
+    # Remove all other session keys
+    keys_to_remove = [key for key in list(session.keys()) if key not in keys_to_keep]
+    for key in keys_to_remove:
+        session.pop(key, None)
+    return redirect(url_for('hjemside')) 
 
 @app.route('/')
 def hjemside():
@@ -128,12 +141,13 @@ def signup():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        email = request.form["email"]
 
         # Hash password
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
  
-        new_user = User(brukernavn=username, passord=hashed_password)
+        new_user = User(brukernavn=username, passord=hashed_password, email = email)
         db.session.add(new_user)
         db.session.commit()  # Save user to database
 
@@ -170,10 +184,10 @@ def login():
 
             if "player1" not in session:
                 session["player1"] = username
-                response.set_cookie("username", username, max_age=60*60*24)  # Save cookie for 1 day
+                response.set_cookie("username1", username, max_age=60*60*24)  # Save cookie for 1 day
             elif "player2" not in session:
                 session["player2"] = username
-                response.set_cookie("username", username, max_age=60*60*24)
+                response.set_cookie("username2", username, max_age=60*60*24)
             else:
                 return "Maks spillegrense nådd"
 
