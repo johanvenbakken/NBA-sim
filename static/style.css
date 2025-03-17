@@ -484,19 +484,19 @@ li {
 
 .pp-containers{
     width: 100%;
-    height: 200vh;
+    height: 220vh;
     background-color: #f9faff;
     display: flex;
     flex-direction: row;
 }
 .pp-1, .pp-3{
     width: 30%;
-    height: 200vh;
+    height: 220vh;
 }
 
 .pp-2 {
     width: 40%;
-    height: 100%;
+    height: 220vh;
     margin-top: 2em;
 }
 

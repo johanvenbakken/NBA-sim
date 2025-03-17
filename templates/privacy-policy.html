@@ -7,6 +7,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <style>
+        :root {
+            --primary-bg: black;
+            --hover-bg: #333;
+            --active-bg: #555;
+            --text-color: white;
+        }
+
+        .privacy-button {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.8em 1.5em;
+            border: none;
+            border-radius: 1em;
+            cursor: pointer;
+            box-shadow: 0.2em 0.4em 1em rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease, transform 0.2s ease;
+            width: 50%;
+            max-width: 20rem;
+        }
+
+        .privacy-button:hover {
+            background-color: var(--hover-bg);
+            transform: scale(1.05);
+        }
+
+        .privacy-button:active {
+            background-color: var(--active-bg);
+            transform: scale(0.98);
+        }
+
+        /* Centering the button */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+    </style>
+    <script>
+        function tilbake_hjemside(){
+            window.location.href = "/";
+        }
+    </script>
     <div class="pp-containers">
         <div class="pp-1"></div>
         <div class="pp-2">
@@ -64,6 +110,8 @@
             <hr>
             <p id="privacy-policy_text">This Privacy Notice was last updated on 07.03.2025 This Privacy Notice may change from time to time. 
                 You will always find the latest version of this Privacy Notice on our website.</p>
+            <br>
+            <button class="privacy-button" onclick="tilbake_hjemside()">accept</button>
         </div>
         <div class="pp-3"></div>
     </div>

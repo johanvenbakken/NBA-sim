@@ -452,9 +452,26 @@ def simulering():
             session['Score_lagB'] = Score_lagB
             session['kamplogg'] = kamplogg
             session['player_points'] = player_points
+        
+        def update_lederbord(username):
+            user = User.query.filter_by(brukernavn=username).first()
 
+            if user:
+                lederbord_entry = Leaderboard.query.filter_by(user_id=user.id).first()
 
-    
+                if lederbord_entry:
+                    lederbord_entry.antall_seire += 1
+                    db.session.commit()
+                    print(f"Updated {username}'s score by 1")
+
+        if Score_lagA > Score_lagB:
+            with app.app_context():
+                update_lederbord(session['player1'])
+        elif Score_lagA < Score_lagB:
+            with app.app_context():
+                update_lederbord(session['player2'])
+        else:
+            pass    
 
     return render_template(
         'simulering.html',
