@@ -115,12 +115,18 @@ def page_not_found(e):
 @app.route('/clear-session')
 def clear_session():
 
-    keys_to_keep = {"username1", "username2"}  # Adjust this based on how you track login
+    player1 = session.get("player1")
+    player2 = session.get("player2")
 
-    # Remove all other session keys
-    keys_to_remove = [key for key in list(session.keys()) if key not in keys_to_keep]
-    for key in keys_to_remove:
-        session.pop(key, None)
+    # Clear the session
+    session.clear()
+
+    # Restore player1 and player2
+    if player1:
+        session["player1"] = player1
+    if player2:
+        session["player2"] = player2
+
     return redirect(url_for('hjemside')) 
 
 @app.route('/')
