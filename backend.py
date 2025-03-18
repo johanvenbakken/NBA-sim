@@ -112,20 +112,17 @@ basketball_players = {
 def page_not_found(e):
     return render_template("404.html"), 404 
 
+@app.route('/debug_session')
+def debug_session():
+    return jsonify(dict(session))  # Convert session data to JSON and return it
+
 @app.route('/clear-session')
 def clear_session():
+    keys_to_remove = ["Score_lagA", "Score_lagB"]  
+    for key in keys_to_remove:
+        session.pop(key, None)  
 
-    player1 = session.get("player1")
-    player2 = session.get("player2")
-
-    session.clear()
-
-    if player1:
-        session["player1"] = player1
-    if player2:
-        session["player2"] = player2
-
-    return redirect(url_for('hjemside')) 
+    return redirect(url_for('draft'))
 
 @app.route('/')
 def hjemside():
@@ -172,7 +169,7 @@ def signup():
         db.session.commit()
 
         print("Ny bruker registrert")
-        return f"Logging in with {username}"
+        return render_template("hjemside.html")
 
     return render_template("signup.html")
 
