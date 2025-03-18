@@ -207,6 +207,24 @@ def login():
 
     return render_template("login.html")  # Show login page for GET requests
 
+@app.route('/logout_player1')
+def logout_player1():
+    session.pop('player1', None)
+    response = make_response(render_template('logout.html', message="You have been logged out.")) 
+    response.set_cookie('username1', '', expires=0)
+
+    return response
+
+@app.route('/logout_player2')
+def logout_player2():
+    session.pop('player2', None)
+    response = make_response(render_template('logout.html', message="You have been logged out.")) 
+    response.set_cookie('username2', '', expires=0)
+    return response
+
+
+
+
 @app.route('/get_players')
 def get_players():
     return jsonify({

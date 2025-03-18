@@ -60,10 +60,12 @@
     if (player1) {
         document.getElementById("login_knapp_spiller1").style.display = "none"; // Hide button
         document.getElementById("welcomeMessage1").style.display = "block"; // Show text
+        document.getElementById("logout_knapp_spiller1").style.display = "block";
         document.getElementById("welcomeMessage1").innerText = `Welcome, ${player1} (Player 1)`;
     } else {
         document.getElementById("login_knapp_spiller1").style.display = "block";
         document.getElementById("welcomeMessage1").style.display = "none";
+        document.getElementById("logout_knapp_spiller1").style.display = "none";
     }
 
     // Check for Player 2's login status
@@ -71,10 +73,12 @@
     if (player2) {
         document.getElementById("login_knapp_spiller2").style.display = "none";
         document.getElementById("welcomeMessage2").style.display = "block";
+        document.getElementById("logout_knapp_spiller2").style.display = "block";
         document.getElementById("welcomeMessage2").innerText = `Welcome, ${player2} (Player 2)`;
     } else {
         document.getElementById("login_knapp_spiller2").style.display = "block";
         document.getElementById("welcomeMessage2").style.display = "none";
+        document.getElementById("logout_knapp_spiller2").style.display = "none";
     }
     }
 
@@ -103,6 +107,14 @@
             });
         }
     });
+
+    function logoutplayer1() {
+        window.location.href = "/logout_player1";e
+    }
+
+    function logoutplayer2() {
+        window.location.href = "/logout_player2"; 
+    }
 </script>
 <body class="{% if not cookies_accepted %}no-interaction{% endif %}">
 
@@ -124,12 +136,14 @@
 
                 <button onclick="til_login()" class="button_login_hjemside" id="login_knapp_spiller1">logg inn spiller 1</button>
                 <p id="welcomeMessage1" style="display: none;" class="info_tekst_hjemside"></p>
-
+                <button id="logout_knapp_spiller1" style="display: none;" onclick="logoutplayer1()"">Logout</button>      
                 <label for="navn_lagB" class="cool_label">lagnavn lag2</label>
                 <input type="text" id="navn_lagB" class="cool_input">
                 
                 <button onclick="til_login()" class="button_login_hjemside" id="login_knapp_spiller2">logg inn spiller 2</button>
-                <p id="welcomeMessage2" style="display: none;" class="info_tekst_hjemside"button></p>
+                <p id="welcomeMessage2" style="display: none;" class="info_tekst_hjemside"></p>
+                <button id="logout_knapp_spiller2" style="display: none;" onclick="logoutplayer2()">Logout</button>
+
             </div> 
             <div class="bilde_hjemside">
                 <img id="logo_bilde" src="{{ url_for('static', filename='images/NBA-logo2.png') }}">
