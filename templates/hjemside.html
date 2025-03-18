@@ -29,7 +29,10 @@
             body: JSON.stringify({ navn_lagA, navn_lagB })
         })
         .then(response => response.json())
-        .then(data => console.log("Success:", data))
+        .then(data => {
+            console.log("Success:", data);
+            window.location.href = "/draft";
+        })
         .catch(error => console.error("Error:", error));
         window.location.href = "/draft";
     }
@@ -126,7 +129,7 @@
                 <input type="text" id="navn_lagB" class="cool_input">
                 
                 <button onclick="til_login()" class="button_login_hjemside" id="login_knapp_spiller2">logg inn spiller 2</button>
-                <p id="welcomeMessage2" style="display: none;" class="info_tekst_hjemside"></p>
+                <p id="welcomeMessage2" style="display: none;" class="info_tekst_hjemside"button></p>
             </div> 
             <div class="bilde_hjemside">
                 <img id="logo_bilde" src="{{ url_for('static', filename='images/NBA-logo2.png') }}">

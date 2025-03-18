@@ -118,10 +118,8 @@ def clear_session():
     player1 = session.get("player1")
     player2 = session.get("player2")
 
-    # Clear the session
     session.clear()
 
-    # Restore player1 and player2
     if player1:
         session["player1"] = player1
     if player2:
@@ -132,12 +130,20 @@ def clear_session():
 @app.route('/')
 def hjemside():
     cookies_accepted = request.cookies.get('cookiesAccepted')
+    if "username1" in request.cookies and "player1" not in session:
+        username1 = request.cookies.get('username1')
+        session['player1'] = username1
+            
+    if "username2" in request.cookies and "player2" not in session:
+        username2 = request.cookies.get('username2')
+        session['player2'] = username2
+
     return render_template('hjemside.html', cookies_accepted = cookies_accepted)
 
 @app.route("/accept-cookies")
 def accept_cookies():
     response = make_response("Cookies Accepted")
-    response.set_cookie("cookiesAccepted", "true", max_age=60*60*24*365)
+    response.set_cookie("cookiesAccepted", "true", max_age=60*60*24)
     return response
 
 
@@ -484,12 +490,14 @@ def simulering():
                     db.session.commit()
                     print(f"Updated {username}'s score by 1")
 
-        if Score_lagA > Score_lagB:
-            with app.app_context():
-                update_lederbord(session['player1'])
-        elif Score_lagA < Score_lagB:
-            with app.app_context():
-                update_lederbord(session['player2'])
+        if "player1" in session:
+            if Score_lagA > Score_lagB:
+                with app.app_context():
+                    update_lederbord(session['player1'])
+        elif "player2" in session:
+            if Score_lagA < Score_lagB:
+                with app.app_context():
+                    update_lederbord(session['player2'])
         else:
             pass    
 
