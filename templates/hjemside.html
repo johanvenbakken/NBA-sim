@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<style>
+    <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -16,105 +16,6 @@
       background-position: center;
     }
   </style>
-<script>
-    function test(){
-
-        let navn_lagA = document.getElementById("navn_lagA").value
-        let navn_lagB = document.getElementById("navn_lagB").value
-
-        console.log("sucess")
-        fetch('/submit_team_name', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ navn_lagA, navn_lagB })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Success:", data);
-            window.location.href = "/draft";
-        })
-        .catch(error => console.error("Error:", error));
-    }
-    
-    function til_login(){
-        window.location.href = "/login";
-    }
-
-    //hvis spillere er logget inn, byttes ut knapper med tekst. 
-    function checkLoginStatus() {
-    // Helper function to get cookie by name
-    function getCookie(name) {
-        let cookies = document.cookie.split('; ');
-        for (let cookie of cookies) {
-            let [key, value] = cookie.split('=');
-            if (key === name) {
-                return decodeURIComponent(value);
-            }
-        }
-        return null;
-    }
-
-    // Check for Player 1's login status
-    let player1 = getCookie("username1");
-    if (player1) {
-        document.getElementById("login_knapp_spiller1").style.display = "none"; // Hide button
-        document.getElementById("welcomeMessage1").style.display = "block"; // Show text
-        document.getElementById("logout_knapp_spiller1").style.display = "block";
-        document.getElementById("welcomeMessage1").innerText = `Welcome, ${player1} (Player 1)`;
-    } else {
-        document.getElementById("login_knapp_spiller1").style.display = "block";
-        document.getElementById("welcomeMessage1").style.display = "none";
-        document.getElementById("logout_knapp_spiller1").style.display = "none";
-    }
-
-    // Check for Player 2's login status
-    let player2 = getCookie("username2");
-    if (player2) {
-        document.getElementById("login_knapp_spiller2").style.display = "none";
-        document.getElementById("welcomeMessage2").style.display = "block";
-        document.getElementById("logout_knapp_spiller2").style.display = "block";
-        document.getElementById("welcomeMessage2").innerText = `Welcome, ${player2} (Player 2)`;
-    } else {
-        document.getElementById("login_knapp_spiller2").style.display = "block";
-        document.getElementById("welcomeMessage2").style.display = "none";
-        document.getElementById("logout_knapp_spiller2").style.display = "none";
-    }
-    }
-
-    // Run function when page loads
-    document.addEventListener("DOMContentLoaded", checkLoginStatus);
-
-        function til_login(player) {
-            window.location.href = "/login";
-        }
-
-        
-        checkLoginStatus();
-    
-    document.addEventListener("DOMContentLoaded", function () {
-        const cookieOverlay = document.getElementById("cookie-overlay");
-        const acceptButton = document.getElementById("accept-cookies");
-
-        if (acceptButton) {
-            acceptButton.addEventListener("click", function () {
-                fetch("/accept-cookies") // Call Flask route
-                    .then(() => {
-                        cookieOverlay.style.display = "none"; // Hide popup
-                        document.body.classList.remove("no-interaction"); // Enable clicks
-                    })
-                    .catch(err => console.error("Error:", err));
-            });
-        }
-    });
-
-    function logoutplayer1() {
-        window.location.href = "/logout_player1";e
-    }
-
-    function logoutplayer2() {
-        window.location.href = "/logout_player2"; 
-    }
-</script>
 <body class="{% if not cookies_accepted %}no-interaction{% endif %}">
 
     <div class="hjemside_bakgrunn">
@@ -160,5 +61,108 @@
             </div>
         {% endif %}
         </div>
+    <script>
+        function test(){
+        
+                let navn_lagA = document.getElementById("navn_lagA").value
+                let navn_lagB = document.getElementById("navn_lagB").value
+        
+                console.log("sucess")
+                fetch('/submit_team_name', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ navn_lagA, navn_lagB })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success:", data);
+                    window.location.href = "/draft";
+                })
+                .catch(error => console.error("Error:", error));
+            }
+            
+        function til_login(){
+            window.location.href = "/login";
+        }
+        
+        //hvis spillere er logget inn, byttes ut knapper med tekst. 
+        function checkLoginStatus() {
+            // Helper function to get cookie by name
+            function getCookie(name) {
+                let cookies = document.cookie.split('; ');
+                for (let cookie of cookies) {
+                    let [key, value] = cookie.split('=');
+                    if (key === name) {
+                        return decodeURIComponent(value);
+                    }
+                }
+                return null;
+            }
+        
+            // Check for Player 1's login status
+            let player1 = getCookie("username1");
+            if (player1) {
+                document.getElementById("login_knapp_spiller1").style.display = "none"; // Hide button
+                document.getElementById("welcomeMessage1").style.display = "block"; // Show text
+                document.getElementById("logout_knapp_spiller1").style.display = "block";
+                document.getElementById("welcomeMessage1").innerText = `Welcome, ${player1} (Player 1)`;
+            } else {
+                document.getElementById("login_knapp_spiller1").style.display = "block";
+                document.getElementById("welcomeMessage1").style.display = "none";
+                document.getElementById("logout_knapp_spiller1").style.display = "none";
+            }
+        
+            // Check for Player 2's login status
+            let player2 = getCookie("username2");
+            if (player2) {
+                document.getElementById("login_knapp_spiller2").style.display = "none";
+                document.getElementById("welcomeMessage2").style.display = "block";
+                document.getElementById("logout_knapp_spiller2").style.display = "block";
+                document.getElementById("welcomeMessage2").innerText = `Welcome, ${player2} (Player 2)`;
+            } else {
+                document.getElementById("login_knapp_spiller2").style.display = "block";
+                document.getElementById("welcomeMessage2").style.display = "none";
+                document.getElementById("logout_knapp_spiller2").style.display = "none";
+            }
+            }
+        
+        // Run function when page loads
+        document.addEventListener("DOMContentLoaded", checkLoginStatus);
+        
+            function til_login(player) {
+                window.location.href = "/login";
+            }
+        
+                
+            checkLoginStatus();
+        
+        document.addEventListener("DOMContentLoaded", function () {
+                const cookieOverlay = document.getElementById("cookie-overlay");
+                const acceptButton = document.getElementById("accept-cookies");
+                if (acceptButton) {
+                    acceptButton.addEventListener("click", function () {
+                        fetch("/accept-cookies")
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Failed to set cookie");
+                                }
+                                return response.text();
+                            })
+                            .then(() => {
+                            cookieOverlay.style.display = "none";
+                            document.body.classList.remove("no-interaction");
+                        })
+                        .catch(err => console.error("Error:", err));
+                    });
+                }
+            });
+        function logoutplayer1() { 
+            window.location.href = "/logout_player1";e
+        }
+
+        function logoutplayer2() {
+            window.location.href = "/logout_player2"; 
+        }
+    </script>
 </body>
 </html>

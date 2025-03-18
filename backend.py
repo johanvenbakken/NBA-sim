@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 # Define User model
 class User(db.Model):
-    __tablename__ = "Brukere"  # Matches your database table name
+    __tablename__ = "Brukere"  
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     brukernavn = db.Column(db.String(50), unique=True, nullable=False)
@@ -140,7 +140,7 @@ def hjemside():
 @app.route("/accept-cookies")
 def accept_cookies():
     response = make_response("Cookies Accepted")
-    response.set_cookie("cookiesAccepted", "true", max_age=60*60*24)
+    response.set_cookie("cookiesAccepted", "true", max_age=60*60*24, path="/")
     return response
 
 
