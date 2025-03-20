@@ -15,7 +15,7 @@ This is the technical documentation for NBA-sim, a project fully developed by Jo
 ## **Project Overview**
 NBA-sim is a project for those of you who are obbsessed with basketball, or just enjoy watching the game
 
-## **Installation**
+## **Installation (Not possible right now)**
 To install NBA-sim do the following
 1. **Clone the repository**
 ```sh
@@ -37,7 +37,7 @@ brew install mariadb
 brew services start mariadb
 ```
 
-## **Usage**
+## **Usage (not possible right now)**
 To use NBA-sim follow these steps
 1. **Set up the database**
 Before starting the application, you need to import the database dump
@@ -52,7 +52,7 @@ flask run --port 3030
 ```
 3. Open your browser and navigate to `http://localhost:3030`.
 
-PS: (it is not possible right now to create a user, log in or use the leaderboard)
+PS: (it is not possible right now to use the repository)
 ## **Architecture**
 NBA-sim is built using the following technologies
 - **Flask**: A lightweight web framework for building backend applications in Python. Flask is used in this project to handle server-side logic, routing, and template rendering.
