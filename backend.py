@@ -3,6 +3,14 @@ import random
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+email_key = os.getenv("SECRET_KEY")
 
 class Base(DeclarativeBase):
   pass
@@ -10,7 +18,7 @@ class Base(DeclarativeBase):
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://nba_admin:eplekaker@localhost/NBA_sim"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -33,7 +41,18 @@ class Leaderboard(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("Brukere.id"), primary_key=True)
     antall_seire = db.Column(db.Integer, default=0)
 
-app.secret_key = 'bananer'
+class Kamper(db.Model):
+    __tablename__ = "Kamper"
+
+    kamp_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    spiller1 = db.Column(db.String(255), nullable=False)
+    spiller2 = db.Column(db.String(255), nullable=False)
+    vinner = db.Column(db.String(255), nullable=False)
+    taper = db.Column(db.String(255), nullable=False)
+    stilling = db.Column(db.String(255), nullable=False)
+    dato = db.Column(db.DateTime, nullable=False)
+
+app.secret_key = os.getenv("APP.SECRET_KEY")
 
 first_request = True
 
@@ -505,16 +524,45 @@ def simulering():
                     db.session.commit()
                     print(f"Updated {username}'s score by 1")
 
-        if "player1" in session:
+        def save_match():
+            player1 = session.get("player1", " ")
+            player2 = session.get("player2", " ")
+            score = f"{Score_lagA} - {Score_lagB}"
             if Score_lagA > Score_lagB:
-                with app.app_context():
-                    update_lederbord(session['player1'])
-        elif "player2" in session:
-            if Score_lagA < Score_lagB:
-                with app.app_context():
-                    update_lederbord(session['player2'])
+                winner = player1
+                loser = player2
+            elif Score_lagB > Score_lagA:
+                winner = player2
+                loser = player1
+            else:
+                winner = "UAVGJORT"
+                loser = "UAVGJORT"
+            
+            new_match = Kamper(
+                spiller1=player1,
+                spiller2=player2,
+                stilling=score,
+                vinner=winner,
+                taper=loser,
+                dato=datetime.now()
+            )
+
+            db.session.add(new_match)
+            db.session.commit()
+
+        if "player1" in session and Score_lagA > Score_lagB:
+            with app.app_context():
+                update_lederbord(session['player1'])
+
+        elif "player2" in session and Score_lagA < Score_lagB:
+            with app.app_context():
+                update_lederbord(session['player2'])
         else:
-            pass    
+            pass
+
+        if "player1" and "player2" in session:
+            with app.app_context():
+                save_match()
 
     return render_template(
         'simulering.html',
