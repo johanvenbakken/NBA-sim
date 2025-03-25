@@ -6,16 +6,30 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-    <style>
+<style>
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-image: url("{{ url_for('static', filename='images/jordan-knicks.png') }}");
-      background-size: cover;
-      background-position: center;
+        margin: 0;
+        padding: 0;
+        height: 100%;
     }
-  </style>
+
+    .hjemside_bakgrunn {
+        background-image: url("{{ url_for('static', filename='images/jordan-knicks.png') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh; /* Only cover the first 100vh (viewport height) */
+        width: 100%;
+        position: relative;
+    }
+
+    body {
+        background-color: #fff; /* This will make the rest of the body have a white background */
+    }
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
 <body class="{% if not cookies_accepted %}no-interaction{% endif %}">
 
     <div class="hjemside_bakgrunn">
@@ -165,4 +179,5 @@
         }
     </script>
 </body>
+{% endblock %}
 </html>

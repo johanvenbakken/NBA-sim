@@ -7,29 +7,41 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         html, body {
-          margin: 0;
-          padding: 0;
-          height: 100%;
-          background-image: url("{{ url_for('static', filename='images/mjtrophy-edited_16x9.png') }}");
-          background-size: cover;
-          background-position: center;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    
+        .ledertavle_bakgrunn {
+            background-image: url("{{ url_for('static', filename='images/mjtrophy-edited_16x9.png') }}");
+            background-size: cover;
+            background-position: center;
+            height: 100vh; /* Background only covers the first 100vh */
+            width: 100%;
+            position: relative;
+        }
+    
+        body {
+            background-color: #fff; /* Ensure the rest of the page has a white background */
         }
     </style>
 </head>
 <body>
-    <div class="ledertavle_header">
-        <h id="draft_headerskrift">Ledertavle</h>
-    </div>
-    <div class="ledertavle_innhold">
-        <div class="ledertavle_boks1"></div>
-        <div class="ledertavle_boks2">
-            <ul>
-                {% for row in rows %}
-                <li class="draft_spilleretekst">{{ row["brukernavn"] }} - {{row["antall_seire"] }} wins</li>
-                {% endfor %}
-            </ul>
+    <div class="ledertavle_bakgrunn">
+        <div class="ledertavle_header">
+            <h id="draft_headerskrift">Ledertavle</h>
         </div>
-        <div class="ledertavle_boks3"></div>
+        <div class="ledertavle_innhold">
+            <div class="ledertavle_boks1"></div>
+            <div class="ledertavle_boks2">
+                <ul>
+                    {% for row in rows %}
+                    <li class="draft_spilleretekst">{{ row["brukernavn"] }} - {{row["antall_seire"] }} wins</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="ledertavle_boks3"></div>
+        </div>
     </div>
 </body>
 </html>

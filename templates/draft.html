@@ -7,115 +7,126 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-image: url("{{ url_for('static', filename='images/yes_16x9.png') }}");
-      background-size: cover;
-      background-position: center;
+        margin: 0;
+        padding: 0;
+        height: 100%;
     }
-  </style>
+
+    .draft_bakgrunn {
+        background-image: url("{{ url_for('static', filename='images/yes_16x9.png') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh; /* Background only covers the first 100vh */
+        width: 100%;
+        position: relative;
+    }
+
+    body {
+        background-color: #fff; /* Ensure the rest of the page has a white background */
+    }
+</style>
 </head>
 <body>
-  <div class="header_draft">
-    <p id="draft_headerskrift">DRAFT - spiller1, velg spiller</p>
-  </div>
-  <div class="draft_boksmaster">
-    <div class="draft_boks1">
-      <div class="draft_rad1">
-        <p class="draft_spilleretekst">{{ navn_lagA }}</p>
+  <div class="draft_bakgrunn">
+    <div class="header_draft">
+      <p id="draft_headerskrift">DRAFT - spiller1, velg spiller</p>
+    </div>
+    <div class="draft_boksmaster">
+      <div class="draft_boks1">
+        <div class="draft_rad1">
+          <p class="draft_spilleretekst">{{ navn_lagA }}</p>
+        </div>
+          <div class="draft_rad2">
+            <p id="lagA_spiller1" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad3">
+            <p id="lagA_spiller2" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad4">
+            <p id="lagA_spiller3" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad5">
+            <p id="lagA_spiller4" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad6">
+            <p id="lagA_spiller5" class="draft_spilleretekst"></p>
+          </div>
+        <div class="draft_rad7">
+          <p id="pengesum_lagA" class="draft_spilleretekst">15$</p>
+        </div>
       </div>
+      <div class="draft_boks2">
+        <div class="draft_rad1">
+          <p class="draft_spilleretekst_posisjoner">PG</p>
+          <p class="draft_spilleretekst_posisjoner">SG</p>
+          <p class="draft_spilleretekst_posisjoner">SF</p>
+          <p class="draft_spilleretekst_posisjoner">PF</p>
+          <p class="draft_spilleretekst_posisjoner">C</p>
+        </div>
         <div class="draft_rad2">
-          <p id="lagA_spiller1" class="draft_spilleretekst"></p>
+          <p class="draft_spilleretekst" id="pg1" onclick="velgspiller()">spiller1</p>
+          <p class="draft_spilleretekst" id="sg1" onclick="velgspiller()">spiller1</p>
+          <p class="draft_spilleretekst" id="sf1" onclick="velgspiller()">spiller1</p>
+          <p class="draft_spilleretekst" id="pf1" onclick="velgspiller()">spiller1</p>
+          <p class="draft_spilleretekst" id="c1" onclick="velgspiller()">spiller1</p>
         </div>
         <div class="draft_rad3">
-          <p id="lagA_spiller2" class="draft_spilleretekst"></p>
+          <p class="draft_spilleretekst" id="pg2" onclick="velgspiller()">spiller2</p>
+          <p class="draft_spilleretekst" id="sg2" onclick="velgspiller()">spiller2</p>
+          <p class="draft_spilleretekst" id="sf2" onclick="velgspiller()">spiller2</p>
+          <p class="draft_spilleretekst" id="pf2" onclick="velgspiller()">spiller2</p>
+          <p class="draft_spilleretekst" id="c2" onclick="velgspiller()">spiller2</p>
         </div>
         <div class="draft_rad4">
-          <p id="lagA_spiller3" class="draft_spilleretekst"></p>
+          <p class="draft_spilleretekst" id="pg3" onclick="velgspiller()">spiller3</p>
+          <p class="draft_spilleretekst" id="sg3" onclick="velgspiller()">spiller3</p>
+          <p class="draft_spilleretekst" id="sf3" onclick="velgspiller()">spiller3</p>
+          <p class="draft_spilleretekst" id="pf3" onclick="velgspiller()">spiller3</p>
+          <p class="draft_spilleretekst" id="c3" onclick="velgspiller()">spiller3</p>
         </div>
         <div class="draft_rad5">
-          <p id="lagA_spiller4" class="draft_spilleretekst"></p>
+          <p class="draft_spilleretekst" id="pg4" onclick="velgspiller()">spiller4</p>
+          <p class="draft_spilleretekst" id="sg4" onclick="velgspiller()">spiller4</p>
+          <p class="draft_spilleretekst" id="sf4" onclick="velgspiller()">spiller4</p>
+          <p class="draft_spilleretekst" id="pf4" onclick="velgspiller()">spiller4</p>
+          <p class="draft_spilleretekst" id="c4" onclick="velgspiller()">spiller4</p>
         </div>
         <div class="draft_rad6">
-          <p id="lagA_spiller5" class="draft_spilleretekst"></p>
+          <p class="draft_spilleretekst" id="pg5" onclick="velgspiller()">spiller5</p>
+          <p class="draft_spilleretekst" id="sg5" onclick="velgspiller()">spiller5</p>
+          <p class="draft_spilleretekst" id="sf5" onclick="velgspiller()">spiller5</p>
+          <p class="draft_spilleretekst" id="pf5" onclick="velgspiller()">spiller5</p>
+          <p class="draft_spilleretekst" id="c5" onclick="velgspiller()">spiller5</p>
         </div>
-      <div class="draft_rad7">
-        <p id="pengesum_lagA" class="draft_spilleretekst">15$</p>
-      </div>
-    </div>
-    <div class="draft_boks2">
-      <div class="draft_rad1">
-        <p class="draft_spilleretekst_posisjoner">PG</p>
-        <p class="draft_spilleretekst_posisjoner">SG</p>
-        <p class="draft_spilleretekst_posisjoner">SF</p>
-        <p class="draft_spilleretekst_posisjoner">PF</p>
-        <p class="draft_spilleretekst_posisjoner">C</p>
-      </div>
-      <div class="draft_rad2">
-        <p class="draft_spilleretekst" id="pg1" onclick="velgspiller()">spiller1</p>
-        <p class="draft_spilleretekst" id="sg1" onclick="velgspiller()">spiller1</p>
-        <p class="draft_spilleretekst" id="sf1" onclick="velgspiller()">spiller1</p>
-        <p class="draft_spilleretekst" id="pf1" onclick="velgspiller()">spiller1</p>
-        <p class="draft_spilleretekst" id="c1" onclick="velgspiller()">spiller1</p>
-      </div>
-      <div class="draft_rad3">
-        <p class="draft_spilleretekst" id="pg2" onclick="velgspiller()">spiller2</p>
-        <p class="draft_spilleretekst" id="sg2" onclick="velgspiller()">spiller2</p>
-        <p class="draft_spilleretekst" id="sf2" onclick="velgspiller()">spiller2</p>
-        <p class="draft_spilleretekst" id="pf2" onclick="velgspiller()">spiller2</p>
-        <p class="draft_spilleretekst" id="c2" onclick="velgspiller()">spiller2</p>
-      </div>
-      <div class="draft_rad4">
-        <p class="draft_spilleretekst" id="pg3" onclick="velgspiller()">spiller3</p>
-        <p class="draft_spilleretekst" id="sg3" onclick="velgspiller()">spiller3</p>
-        <p class="draft_spilleretekst" id="sf3" onclick="velgspiller()">spiller3</p>
-        <p class="draft_spilleretekst" id="pf3" onclick="velgspiller()">spiller3</p>
-        <p class="draft_spilleretekst" id="c3" onclick="velgspiller()">spiller3</p>
-      </div>
-      <div class="draft_rad5">
-        <p class="draft_spilleretekst" id="pg4" onclick="velgspiller()">spiller4</p>
-        <p class="draft_spilleretekst" id="sg4" onclick="velgspiller()">spiller4</p>
-        <p class="draft_spilleretekst" id="sf4" onclick="velgspiller()">spiller4</p>
-        <p class="draft_spilleretekst" id="pf4" onclick="velgspiller()">spiller4</p>
-        <p class="draft_spilleretekst" id="c4" onclick="velgspiller()">spiller4</p>
-      </div>
-      <div class="draft_rad6">
-        <p class="draft_spilleretekst" id="pg5" onclick="velgspiller()">spiller5</p>
-        <p class="draft_spilleretekst" id="sg5" onclick="velgspiller()">spiller5</p>
-        <p class="draft_spilleretekst" id="sf5" onclick="velgspiller()">spiller5</p>
-        <p class="draft_spilleretekst" id="pf5" onclick="velgspiller()">spiller5</p>
-        <p class="draft_spilleretekst" id="c5" onclick="velgspiller()">spiller5</p>
-      </div>
-      <div class="draft_rad7">
-          <button id="submitBtn">start simulation</button>
-      </div>
-    </div>
-    <div class="draft_boks3">
-      <div class="draft_rad1">
-        <p class="draft_spilleretekst">{{ navn_lagB }}</p>
-      </div>
-        <div class="draft_rad2">
-        <p id="lagB_spiller1" class="draft_spilleretekst"></p>
+        <div class="draft_rad7">
+            <button id="submitBtn">start simulation</button>
         </div>
-        <div class="draft_rad3">
-          <p id="lagB_spiller2" class="draft_spilleretekst"></p>
+      </div>
+      <div class="draft_boks3">
+        <div class="draft_rad1">
+          <p class="draft_spilleretekst">{{ navn_lagB }}</p>
         </div>
-        <div class="draft_rad4">
-          <p id="lagB_spiller3" class="draft_spilleretekst"></p>
+          <div class="draft_rad2">
+          <p id="lagB_spiller1" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad3">
+            <p id="lagB_spiller2" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad4">
+            <p id="lagB_spiller3" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad5">
+            <p id="lagB_spiller4" class="draft_spilleretekst"></p>
+          </div>
+          <div class="draft_rad6">
+            <p id="lagB_spiller5" class ="draft_spilleretekst"></p>
+          </div>
+        <div class="draft_rad7">
+          <p id="pengesum_lagB" class="draft_spilleretekst">15$</p>
         </div>
-        <div class="draft_rad5">
-          <p id="lagB_spiller4" class="draft_spilleretekst"></p>
-        </div>
-        <div class="draft_rad6">
-          <p id="lagB_spiller5" class ="draft_spilleretekst"></p>
-        </div>
-      <div class="draft_rad7">
-        <p id="pengesum_lagB" class="draft_spilleretekst">15$</p>
       </div>
     </div>
   </div>
-  
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
