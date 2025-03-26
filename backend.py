@@ -6,16 +6,15 @@ from sqlalchemy.orm import DeclarativeBase
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-
+from cryptography.fernet import Fernet
 
 load_dotenv()
 
-email_key = os.getenv("SECRET_KEY")
+key = os.getenv("SECRET_KEY")
+fernet = Fernet(key)
 
 class Base(DeclarativeBase):
   pass
-
-
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -174,8 +173,9 @@ def signup():
         # Hash password
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
+        encrypted_email = fernet.encrypt(email.encode())
  
-        new_user = User(brukernavn=username, passord=hashed_password, email = email)
+        new_user = User(brukernavn=username, passord=hashed_password, email = encrypted_email)
         db.session.add(new_user)
         db.session.commit()  # Save user to database
 
