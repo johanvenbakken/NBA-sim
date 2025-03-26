@@ -26,6 +26,9 @@
     }
 </style>
 </head>
+{% extends "base.html" %}
+
+{% block content %}
 <body>
   <div class="draft_bakgrunn">
     <div class="header_draft">
@@ -129,4 +132,5 @@
   </div>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+{% endblock %}
 </html>

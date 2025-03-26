@@ -272,6 +272,14 @@ def draft():
 def privpoli():
     return render_template('privacy-policy.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/FAQ')
+def FAQ():
+    return render_template('FAQ.html')
+
 @app.route('/submit', methods=['POST'])
 def submit_teams():
     data = request.get_json()
@@ -296,6 +304,14 @@ def ledertavle():
                                             
     
     return render_template("ledertavle.html", rows = rows)
+
+@app.route('/karriere')
+def karriere():
+    username1 = session.get('player1',' ')
+    username2 = session.get('player2', ' ')
+    matches_player1 = db.session.query(Kamper).filter(Kamper.spiller1 == username1).all()
+    matches_player2 = db.session.query(Kamper).filter(Kamper.spiller2 == username2).all()
+    return render_template('karriere.html', username1 = username1, matches_player1 = matches_player1, username2 = username2, matches_player2 = matches_player2)
 
 @app.route('/simulering')
 def simulering():

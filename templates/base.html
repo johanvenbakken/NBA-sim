@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Flask App{% endblock %}</title>
 </head>
+<style>
+    footer {
+        height: 15vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column; /* Stack the elements vertically */
+        align-items: center; /* Align content to the center */
+        text-align: center; /* Optional: Center the text inside */
+        background-color: #d3d3d3;
+    }
+
+    footer p {
+        margin: 10px 0; /* Add space between paragraphs */
+    }
+</style>
 <body>
 
     <!-- Content Section -->
@@ -16,8 +32,10 @@
 
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2025 My Flask App. All rights reserved.</p>
-        <p>Contact us at <a href="mailto:contact@example.com">contact@example.com</a></p>
+        <p></p>
+        <p>&copy; NBA Simulator. Laget av <a href="https://github.com/johanvenbakken">Johan Venbakken</a></p>
+        <br>
+        <p><a href="/about">About</a> <a href="/privacy-policy" >Privacy Policy</a> <a href="/FAQ">FAQ</a>    <a href="mailto:johanhven@gmail.com">Contact</a></p>
     </footer>
 
 </body>

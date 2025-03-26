@@ -6,6 +6,9 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+{% extends "base.html" %}
+
+{% block content %}
 <body>
     <style>
         :root {
@@ -116,4 +119,5 @@
         <div class="pp-3"></div>
     </div>
 </body>
+{% endblock %}
 </html>

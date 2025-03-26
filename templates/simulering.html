@@ -6,16 +6,29 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        html, body {
+      html, body {
           margin: 0;
           padding: 0;
           height: 100%;
+      }
+  
+      .simulering_bakgrunn {
           background-image: url("{{ url_for('static', filename='images/jordan-shooting3.jpg') }}");
           background-size: cover;
           background-position: center;
-        }
-    </style>
+          height: 100vh; /* Background only covers the first 100vh */
+          width: 100%;
+          position: relative;
+      }
+  
+      body {
+          background-color: #fff; /* Ensure the rest of the page has a white background */
+      }
+  </style>
 </head>
+{% extends "base.html" %}
+
+{% block content %}
 <body>
     <div class="simulering_bakgrunn">
       <div class="header_sim">
@@ -51,6 +64,7 @@
                 <button class="statistikk_knapp" id="myBtn">statistikk</button>
                 <button class="statistikk_knapp" id="til_ledertavle_knapp">Ledertavle</button>
                 <button class="statistikk_knapp" id="reset_knapp" onclick="window.location.href='/clear-session'">Play again</button>
+                <button class="statistikk_knapp" onclick="window.location.href='/karriere'">Karriere</button>
 
                 <div id="myModal" class="modal">
 
@@ -138,4 +152,5 @@
 
     </script>
 </body>
+{% endblock %}
 </html>

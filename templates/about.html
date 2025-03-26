@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <div class="au-containers">
+        <div class="au-1"></div>
+        <div class="au-2">
+            <h1 style="font-family: Arial, Helvetica, sans-serif;">About us</h1>
+            <br>
+            <h2>Intro</h2>
+            <hr>
+            <p id="privacy-policy_text">I have not liked basketball all my life. One day,i bought and started reading slam dunk,
+                slam dunk flipped a switch in me, and all of a sudden i liked playing basketball and watching basketball. That is why i decided to create
+                this simulator, for everyone to enjoy, with the most iconic players from the NBA
+            </p>
+            <br>
+            <h2>How it works</h2>
+            <hr>
+            <p id="privacy-policy_text">The base of the simulation are player stats, which take on a fifa approach. Each player has a 
+                defensive stat and a attacking stat. The program genrates a random number between 80 and 200, deciding the amount of playes
+                 that the match has. If one team is attacking, the program randomly generates one of the 5 positions to get the ball. The attacking player 
+                 then faces off against the defender, with the attacker keeping his attacking stat, and the defender losing 40 of his defending stat. 
+                 it then generates a random number between 1 and the attack+defence stats of the players. if the number is below or equal to the 
+                 attacking stat, the attacker gets the point, and else the deffender gets the ball and counterattacks with his team. 3 or 2 pointer depends on the position     
+            </p>
+            <br>
+            <p id="privacy-policy_text">After the amount of plays is zero, the game ends, and the score gets displayed. if you were logged inn, 
+                you get the win on the leaderboard, and the match gets added to your career, wher eyou can view your record. same happens if you lose
+            </p>
+            <br>
+            <h2>Why use NBA_simulator?</h2>
+            <hr>
+            <p id="privacy-policy_text">Personally, i think it is a lot of fun competing against your friends, which is the number 
+                one reason for why to use NBA_simulator. There is something special with winning against your friends, and being above them on 
+                the leaderboard. 
+            </p>
+        </div>
+        <div class="au-3"></div>
+    </div>
+</body>
+{% endblock %}
+</html>

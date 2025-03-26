@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+    .karriere_bakgrunn {
+        height: 100vh; /* Background only covers the first 100vh */
+        width: 100%;
+        background-image: url("{{ url_for('static', filename='images/kobe_shaq.png') }}");
+        background-size: cover;
+        background-position: center;
+    }
+    ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    line-height: 500%;
+    max-height: 90vh;
+    overflow-y: scroll;
+    }
+</style>
+<body>
+    <div class="karriere_bakgrunn">
+        <div class="karriere_header_master">
+            <div class="karriere_header1">
+                <hi style="margin-top: 2%;" id="sim_headerskrift">Karriere - {{ username1 }}</hi>
+            </div>
+            <div class="karriere_header2">
+                <hi style="margin-top: 2%;" id="sim_headerskrift">Karriere - {{ username2 }}</hi>
+            </div>
+        </div>
+        <div class="karriere_innhold_master" style="margin-top: 2%;">
+            <div class="karriere_innhold1">
+                <ul>
+                    {% for match in matches_player1 %}
+                        <li class="{% if match.vinner == username1 %}vinnerboks{% elif match.taper == username1 %}taperboks{% else %}uavgjortboks{% endif %}">
+                            {{ match["spiller1"] }} - {{ match["stilling"] }} - {{ match["spiller2"] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="karriere_innhold3">
+                <ul>
+                    {% for match in matches_player2 %}
+                        <li class="{% if match.vinner == username2 %}vinnerboks{% elif match.taper == username2 %}taperboks{% else %}uavgjortboks{% endif %}">
+                            {{ match["spiller2"] }} - {{ match["stilling"] }} - {{ match["spiller1"] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
