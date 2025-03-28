@@ -29,7 +29,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     brukernavn = db.Column(db.String(50), unique=True, nullable=False)
     passord = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
     dato_registrert = db.Column(db.Date, nullable=False, server_default=db.func.curdate())  # Matches `curdate()`
 
 
