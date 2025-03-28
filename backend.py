@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response, Response
 import random
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -17,6 +17,7 @@ class Base(DeclarativeBase):
   pass
 
 app = Flask(__name__)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -312,6 +313,7 @@ def karriere():
     matches_player1 = db.session.query(Kamper).filter(Kamper.spiller1 == username1).all()
     matches_player2 = db.session.query(Kamper).filter(Kamper.spiller2 == username2).all()
     return render_template('karriere.html', username1 = username1, matches_player1 = matches_player1, username2 = username2, matches_player2 = matches_player2)
+
 
 @app.route('/simulering')
 def simulering():
