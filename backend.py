@@ -146,7 +146,12 @@ def clear_session():
     keys_to_remove = ["Score_lagA", "Score_lagB"]  
     for key in keys_to_remove:
         session.pop(key, None)  
-
+    simulation_state.update({
+        "has_run": False,
+        "scores": {"Score_lagA": 0, "Score_lagB": 0},
+        "logs": [],
+        "player_points": {}
+    })
     return redirect(url_for('draft'))
 
 @app.route('/')
@@ -320,7 +325,12 @@ def karriere():
     matches_player2 = db.session.query(Kamper).filter(Kamper.spiller2 == username2).all()
     return render_template('karriere.html', username1 = username1, matches_player1 = matches_player1, username2 = username2, matches_player2 = matches_player2)
 
-
+simulation_state = {
+    "has_run": False,
+    "scores": {"Score_lagA": 0, "Score_lagB": 0},
+    "logs": [],
+    "player_points": {}
+}
 
 @app.route('/simulering')
 def simulering():
@@ -354,19 +364,19 @@ def simulering():
         'simulering.html',
         lagA=lagA, 
         lagB=lagB, 
-        Score_lagA=0,
-        Score_lagB=0,
-        kamplogg=[],
-        Poeng_PGlagA=0,
-        Poeng_SGlagA=0,
-        Poeng_SFlagA=0,
-        Poeng_PFlagA=0,
-        Poeng_ClagA=0,
-        Poeng_PGlagB=0,
-        Poeng_SGlagB=0,
-        Poeng_SFlagB=0,
-        Poeng_PFlagB=0,
-        Poeng_ClagB=0,
+        Score_lagA=simulation_state["scores"]["Score_lagA"],
+        Score_lagB=simulation_state["scores"]["Score_lagB"],
+        kamplogg=simulation_state["logs"],
+        Poeng_PGlagA=simulation_state["player_points"].get("PGlagA", 0),
+        Poeng_SGlagA=simulation_state["player_points"].get("SGlagA", 0),
+        Poeng_SFlagA=simulation_state["player_points"].get("SFlagA", 0),
+        Poeng_PFlagA=simulation_state["player_points"].get("PFlagA", 0),
+        Poeng_ClagA=simulation_state["player_points"].get("ClagA", 0),
+        Poeng_PGlagB=simulation_state["player_points"].get("PGlagB", 0),
+        Poeng_SGlagB=simulation_state["player_points"].get("SGlagB", 0),
+        Poeng_SFlagB=simulation_state["player_points"].get("SFlagB", 0),
+        Poeng_PFlagB=simulation_state["player_points"].get("PFlagB", 0),
+        Poeng_ClagB=simulation_state["player_points"].get("ClagB", 0),
         PGlagA_navn=PGlagA['name'],
         SGlagA_navn=SGlagA['name'],
         SFlagA_navn=SFlagA['name'],
@@ -418,6 +428,16 @@ def save_match():
 
 @socketio.on('start_simulation')
 def handle_start_simulation():
+
+    if simulation_state["has_run"]:
+        emit('game_update', {
+            'Score_lagA': simulation_state["scores"]["Score_lagA"],
+            'Score_lagB': simulation_state["scores"]["Score_lagB"],
+            'kamplogg': simulation_state["logs"],
+            'player_points': simulation_state["player_points"]
+        })
+        return
+    
     if session.get('game_completed'):
         emit('game_already_completed')
         return
@@ -614,11 +634,15 @@ def handle_start_simulation():
     game_state['kamplogg'].append(f"Tiden er ute, sluttstilling {game_state['Score_lagA']} - {game_state['Score_lagB']}")
     emit('game_update', game_state)
     
-    # Save the final results to session
-    session['Score_lagA'] = game_state['Score_lagA']
-    session['Score_lagB'] = game_state['Score_lagB']
-    session['kamplogg'] = game_state['kamplogg']
-    session['player_points'] = game_state['player_points']
+    simulation_state.update({
+        "has_run": True,
+        "scores": {
+            "Score_lagA": game_state["Score_lagA"],
+            "Score_lagB": game_state["Score_lagB"]
+        },
+        "logs": game_state["kamplogg"],
+        "player_points": game_state["player_points"]
+    })
     
     # Update leaderboard and save match
     if "player1" in session and game_state['Score_lagA'] > game_state['Score_lagB']:

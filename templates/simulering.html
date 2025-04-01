@@ -153,10 +153,17 @@
       // Connect to Socket.IO
       const socket = io();
 
-      // Start simulation when page loads
-      document.addEventListener('DOMContentLoaded', function() {
-          socket.emit('start_simulation');
+      // Track simulation state client-side
+      window.simulationCompleted = false;
+
+      // Modified connection handler
+      socket.on('connect', function() {
+          if (!window.simulationCompleted) {
+              socket.emit('start_simulation');
+              window.simulationCompleted = true;
+          }
       });
+
 
       // Handle real-time updates from server
       socket.on('game_update', function(data) {
