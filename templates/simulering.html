@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
     <style>
       html, body {
           margin: 0;
@@ -148,6 +149,37 @@
         lederTavleKnapp.onclick = function(){
           window.location.href = "/ledertavle";
         }
+
+      // Connect to Socket.IO
+      const socket = io();
+
+      // Start simulation when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+          socket.emit('start_simulation');
+      });
+
+      // Handle real-time updates from server
+      socket.on('game_update', function(data) {
+          // Update scores
+          document.getElementById('score_tekst').textContent = 
+              `${data.Score_lagA} - ${data.Score_lagB}`;
+
+          // Update game log
+          const logList = document.querySelector('.referat_boks ul');
+          logList.innerHTML = '';
+          data.kamplogg.forEach(log => {
+              const li = document.createElement('li');
+              li.className = 'draft_spilleretekst';
+              li.textContent = log;
+              logList.appendChild(li);
+          });
+          logList.scrollTop = logList.scrollHeight; // Auto-scroll
+
+          // Update player stats modal (if open)
+          if (document.getElementById('myModal').style.display === 'block') {
+              // Update modal content here if needed
+          }
+      });
 
           
     </script>
