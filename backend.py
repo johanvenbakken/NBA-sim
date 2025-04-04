@@ -143,7 +143,7 @@ def debug_session():
 
 @app.route('/clear-session')
 def clear_session():
-    keys_to_remove = ["Score_lagA", "Score_lagB"]  
+    keys_to_remove = ["lagA", "lagB"]  
     for key in keys_to_remove:
         session.pop(key, None)  
     simulation_state.update({

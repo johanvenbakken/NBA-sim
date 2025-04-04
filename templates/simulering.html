@@ -75,16 +75,16 @@
                           <h2>Statistikk</h2>
                         </div>
                         <div class="modal-body">
-                          <p>{{PGlagA_navn}} {{Poeng_PGlagA}}</p>
-                          <p>{{SGlagA_navn}} {{Poeng_SGlagA}}</p>
-                          <p>{{SFlagA_navn}} {{Poeng_SFlagA}}</p>
-                          <p>{{PFlagA_navn}} {{Poeng_PFlagA}}</p>
-                          <p>{{ClagA_navn}} {{Poeng_ClagA}}</p>
-                          <p>{{PGlagB_navn}} {{Poeng_PGlagB}}</p>
-                          <p>{{SGlagB_navn}} {{Poeng_SGlagB}}</p>
-                          <p>{{SFlagB_navn}} {{Poeng_SFlagB}}</p>
-                          <p>{{PFlagB_navn}} {{Poeng_PFlagB}}</p>
-                          <p>{{ClagB_navn}} {{Poeng_ClagB}}</p>
+                          <p id="PGlagA_stat">{{PGlagA_navn}} {{Poeng_PGlagA}}</p>
+                          <p id="SGlagA_stat">{{SGlagA_navn}} {{Poeng_SGlagA}}</p>
+                          <p id="SFlagA_stat">{{SFlagA_navn}} {{Poeng_SFlagA}}</p>
+                          <p id="PFlagA_stat">{{PFlagA_navn}} {{Poeng_PFlagA}}</p>
+                          <p id="ClagA_stat">{{ClagA_navn}} {{Poeng_ClagA}}</p>
+                          <p id="PGlagB_stat">{{PGlagB_navn}} {{Poeng_PGlagB}}</p>
+                          <p id="SGlagB_stat">{{SGlagB_navn}} {{Poeng_SGlagB}}</p>
+                          <p id="SFlagB_stat">{{SFlagB_navn}} {{Poeng_SFlagB}}</p>
+                          <p id="PFlagB_stat">{{PFlagB_navn}} {{Poeng_PFlagB}}</p>
+                          <p id="ClagB_stat">{{ClagB_navn}} {{Poeng_ClagB}}</p>
                         </div>
                     </div>
                 </div>   
@@ -184,7 +184,28 @@
 
           // Update player stats modal (if open)
           if (document.getElementById('myModal').style.display === 'block') {
-              // Update modal content here if needed
+              // Team A
+              document.getElementById('PGlagA_stat').textContent =
+                  `${data.PGlagA_navn} ${data.player_points.PGlagA || 0}`;
+              document.getElementById('SGlagA_stat').textContent =
+                  `${data.SGlagA_navn} ${data.player_points.SGlagA || 0}`;
+              document.getElementById('SFlagA_stat').textContent =
+                  `${data.SFlagA_navn} ${data.player_points.SFlagA || 0}`;
+              document.getElementById('PDlagA_stat').textContent =
+                  `${data.PFlagA_navn} ${data.player_points.PFlagA || 0}`;
+              document.getElementById('ClagA_stat').textContent =
+                  `${data.ClagA_navn} ${data.player_points.ClagA || 0}`;
+              // Team B
+              document.getElementById('PGlagB_stat').textContent =
+                  `${data.PGlagB_navn} ${data.player_points.PGlagB || 0}`;
+              document.getElementById('SGlagB_stat').textContent =
+                  `${data.SGlagB_navn} ${data.player_points.SGlagB || 0}`;
+              document.getElementById('SFlagB_stat').textContent =
+                  `${data.SFlagB_navn} ${data.player_points.SFlagB || 0}`;
+              document.getElementById('PFlagB_stat').textContent =
+                  `${data.PFlagB_navn} ${data.player_points.PFlagB || 0}`;
+              document.getElementById('ClagB_stat').textContent =
+                  `${data.ClagB_navn} ${data.player_points.ClagB || 0}`;
           }
       });
 
