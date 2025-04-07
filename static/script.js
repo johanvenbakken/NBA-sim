@@ -1,121 +1,180 @@
-function velgspiller() {
-  const element = document.getElementById("draft_headerskrift");
-  if (element.innerHTML === "DRAFT - spiller1, velg spiller") {
-    element.innerHTML = "DRAFT - spiller2, velg spiller";
-  } else {
-    element.innerHTML = "DRAFT - spiller1, velg spiller";
-  }
-}
-
 const paragraphs = document.querySelectorAll(".draft_spilleretekst");
 
 let counter = 0;
 let penger_laga = 15;
 let penger_lagb = 15;
 
+lagA_tiers = []
+lagB_tiers = []
+
 function changeColorOnClick(event) {
   const clickedElement = event.target;
 
   if (clickedElement.classList.contains("clicked")) {
-    return;
+    return; // Prevent re-clicking the same element
   }
-  // Check if the clicked element is a <p> tag inside a div with class "draft_rad2"
+
+  // Check if the clicked element is in draft_rad2 (tier 5)
   let isInDraftRad2 = clickedElement.closest("div.draft_rad2") !== null;
 
   if (isInDraftRad2) {
-    if (counter % 2 == 0) {
-      penger_laga -= 5;
-      document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
-    } else {
-      penger_lagb -= 5;
-      document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+    if (counter % 2 == 0) { // Player A's turn
+      if (lagA_tiers.includes(5)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_laga -= 5;
+        document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
+        lagA_tiers.push(5); // Add the tier to the list of selected players
+      }
+    } else { // Player B's turn
+      if (lagB_tiers.includes(5)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_lagb -= 5;
+        document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+        lagB_tiers.push(5); // Add the tier to the list of selected players
+      }
     }
   }
+
+  // Handle other draft tiers similarly (draft_rad3, draft_rad4, etc.)
   let isInDraftRad3 = clickedElement.closest("div.draft_rad3") !== null;
-
   if (isInDraftRad3) {
-    if (counter % 2 == 0) {
-      penger_laga -= 4;
-      document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
-    } else {
-      penger_lagb -= 4;
-      document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+    if (counter % 2 == 0) { // Player A's turn
+      if (lagA_tiers.includes(4)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_laga -= 4;
+        document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
+        lagA_tiers.push(4);
+      }
+    } else { // Player B's turn
+      if (lagB_tiers.includes(4)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_lagb -= 4;
+        document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+        lagB_tiers.push(4);
+      }
     }
   }
+
   let isInDraftRad4 = clickedElement.closest("div.draft_rad4") !== null;
-
   if (isInDraftRad4) {
-    if (counter % 2 == 0) {
-      penger_laga -= 3;
-      document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
-    } else {
-      penger_lagb -= 3;
-      document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+    if (counter % 2 == 0) { // Player A's turn
+      if (lagA_tiers.includes(3)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_laga -= 3;
+        document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
+        lagA_tiers.push(3);
+      }
+    } else { // Player B's turn
+      if (lagB_tiers.includes(3)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_lagb -= 3;
+        document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+        lagB_tiers.push(3);
+      }
     }
   }
+
   let isInDraftRad5 = clickedElement.closest("div.draft_rad5") !== null;
-
   if (isInDraftRad5) {
-    if (counter % 2 == 0) {
-      penger_laga -= 2;
-      document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
-    } else {
-      penger_lagb -= 2;
-      document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+    if (counter % 2 == 0) { // Player A's turn
+      if (lagA_tiers.includes(2)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_laga -= 2;
+        document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
+        lagA_tiers.push(2);
+      }
+    } else { // Player B's turn
+      if (lagB_tiers.includes(2)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_lagb -= 2;
+        document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+        lagB_tiers.push(2);
+      }
     }
   }
+
   let isInDraftRad6 = clickedElement.closest("div.draft_rad6") !== null;
-
   if (isInDraftRad6) {
-    if (counter % 2 == 0) {
-      penger_laga -= 1;
-      document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
-    } else {
-      penger_lagb -= 1;
-      document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+    if (counter % 2 == 0) { // Player A's turn
+      if (lagA_tiers.includes(1)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_laga -= 1;
+        document.getElementById("pengesum_lagA").innerHTML = penger_laga + "$";
+        lagA_tiers.push(1);
+      }
+    } else { // Player B's turn
+      if (lagB_tiers.includes(1)) {
+        alert("Du må velge en annen spiller");
+        return; // Stop the function to let the player try again
+      } else {
+        penger_lagb -= 1;
+        document.getElementById("pengesum_lagB").innerHTML = penger_lagb + "$";
+        lagB_tiers.push(1);
+      }
     }
   }
 
+  // Set the player's color based on the turn (blue for Team A, red for Team B)
   if (counter % 2 === 0) {
     clickedElement.style.color = "blue";
   } else {
     clickedElement.style.color = "red";
   }
 
+  // Mark the clicked element as selected
   clickedElement.classList.add("clicked");
 
+  // Update the player names in the respective team slots
   counter++;
 
   if (counter === 1) {
-    document.getElementById("lagA_spiller1").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagA_spiller1").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller2, velg spiller"
   } else if (counter === 2) {
-    document.getElementById("lagB_spiller1").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagB_spiller1").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller1, velg spiller"
   } else if (counter === 3) {
-    document.getElementById("lagA_spiller2").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagA_spiller2").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller2, velg spiller"
   } else if (counter === 4) {
-    document.getElementById("lagB_spiller2").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagB_spiller2").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller1, velg spiller"
   } else if (counter === 5) {
-    document.getElementById("lagA_spiller3").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagA_spiller3").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller2, velg spiller"
   } else if (counter === 6) {
-    document.getElementById("lagB_spiller3").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagB_spiller3").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller1, velg spiller"
   } else if (counter === 7) {
-    document.getElementById("lagA_spiller4").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagA_spiller4").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller2, velg spiller"
   } else if (counter === 8) {
-    document.getElementById("lagB_spiller4").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagB_spiller4").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller1, velg spiller"
   } else if (counter === 9) {
-    document.getElementById("lagA_spiller5").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagA_spiller5").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT - spiller2, velg spiller"
   } else if (counter === 10) {
-    document.getElementById("lagB_spiller5").innerHTML =
-      clickedElement.textContent;
+    document.getElementById("lagB_spiller5").innerHTML = clickedElement.textContent;
+    document.getElementById("draft_headerskrift").innerHTML = "DRAFT FERDIG"
   }
 }
 

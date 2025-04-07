@@ -492,7 +492,7 @@ def handle_start_simulation():
     
     # Run the simulation with small delays between plays
     for i in range(antall_spill):
-        eventlet.sleep(0.1)  # Small delay between plays
+        eventlet.sleep(0.15)  # Small delay between plays
         
         spill_poisjon = random.randint(1,5)
         if spill_poisjon == 1:
