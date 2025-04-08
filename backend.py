@@ -31,7 +31,7 @@ db = SQLAlchemy(app)
 
 # Define User model
 class User(db.Model):
-    __tablename__ = "Brukere"  
+    __tablename__ = "brukere"  
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     brukernavn = db.Column(db.String(50), unique=True, nullable=False)
@@ -42,13 +42,13 @@ class User(db.Model):
 
 # Define Leaderboard model
 class Leaderboard(db.Model):
-    __tablename__ = "Lederbord"
+    __tablename__ = "lederbord"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("Brukere.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("brukere.id"), primary_key=True)
     antall_seire = db.Column(db.Integer, default=0)
 
 class Kamper(db.Model):
-    __tablename__ = "Kamper"
+    __tablename__ = "kamper"
 
     kamp_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     spiller1 = db.Column(db.String(255), nullable=False)
@@ -56,7 +56,7 @@ class Kamper(db.Model):
     vinner = db.Column(db.String(255), nullable=False)
     taper = db.Column(db.String(255), nullable=False)
     stilling = db.Column(db.String(255), nullable=False)
-    dato = db.Column(db.DateTime, nullable=False)
+    dato = db.Column(db.Date, nullable=False)
 
 app.secret_key = os.getenv("APP.SECRET_KEY")
 
@@ -402,12 +402,12 @@ def update_lederbord(username):
 def save_match():
     player1 = session.get("player1", " ")
     player2 = session.get("player2", " ")
-    score = f"{session['Score_lagA']} - {session['Score_lagB']}"
+    score = f"{simulation_state['scores']['Score_lagA']} - {simulation_state['scores']['Score_lagB']}"
     
-    if session['Score_lagA'] > session['Score_lagB']:
+    if simulation_state['scores']['Score_lagA'] > simulation_state['scores']['Score_lagB']:
         winner = player1
         loser = player2
-    elif session['Score_lagB'] > session['Score_lagA']:
+    elif simulation_state['scores']['Score_lagB'] > simulation_state['scores']['Score_lagA']:
         winner = player2
         loser = player1
     else:
@@ -652,6 +652,8 @@ def handle_start_simulation():
     
     if "player1" and "player2" in session:
         save_match()
+    
+    print("hubbabubba")
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=3030)
