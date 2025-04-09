@@ -55,7 +55,8 @@ class Kamper(db.Model):
     spiller2 = db.Column(db.String(255), nullable=False)
     vinner = db.Column(db.String(255), nullable=False)
     taper = db.Column(db.String(255), nullable=False)
-    stilling = db.Column(db.String(255), nullable=False)
+    stilling1 = db.Column(db.String(255), nullable=False)
+    stilling2 = db.Column(db.String(255), nullable=False)
     dato = db.Column(db.Date, nullable=False)
 
 app.secret_key = os.getenv("APP.SECRET_KEY")
@@ -323,7 +324,7 @@ def karriere():
     username2 = session.get('player2', ' ')
     matches_player1 = db.session.query(Kamper).filter(Kamper.spiller1 == username1).all()
     matches_player2 = db.session.query(Kamper).filter(Kamper.spiller2 == username2).all()
-    return render_template('karriere.html', username1 = username1, matches_player1 = matches_player1, username2 = username2, matches_player2 = matches_player2)
+    return render_template('karriere.html', username1 = username1, matches_player1 = matches_player1, username2 = username2, matches_player2 = matches_player2 )
 
 simulation_state = {
     "has_run": False,
@@ -401,23 +402,26 @@ def update_lederbord(username):
 
 def save_match():
     player1 = session.get("player1", " ")
-    player2 = session.get("player2", " ")
-    score = f"{simulation_state['scores']['Score_lagA']} - {simulation_state['scores']['Score_lagB']}"
-    
+    player2 = session.get("player2", " ")    
+    score1 = f"{simulation_state['scores']['Score_lagA']} - {simulation_state['scores']['Score_lagB']}"
+    score2 = f"{simulation_state['scores']['Score_lagB']} - {simulation_state['scores']['Score_lagA']}"
     if simulation_state['scores']['Score_lagA'] > simulation_state['scores']['Score_lagB']:
         winner = player1
         loser = player2
+
     elif simulation_state['scores']['Score_lagB'] > simulation_state['scores']['Score_lagA']:
         winner = player2
         loser = player1
     else:
         winner = "UAVGJORT"
         loser = "UAVGJORT"
-    
+
+
     new_match = Kamper(
         spiller1=player1,
         spiller2=player2,
-        stilling=score,
+        stilling1=score1,
+        stilling2=score2,
         vinner=winner,
         taper=loser,
         dato=datetime.now()

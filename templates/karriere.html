@@ -44,7 +44,7 @@
                 <ul>
                     {% for match in matches_player1 %}
                         <li class="{% if match.vinner == username1 %}vinnerboks{% elif match.taper == username1 %}taperboks{% else %}uavgjortboks{% endif %}">
-                            {{ match["spiller1"] }} - {{ match["stilling"] }} - {{ match["spiller2"] }}
+                            {{ match["spiller1"] }} - {{ match["stilling1"] }} - {{ match["spiller2"] }}
                         </li>
                     {% endfor %}
                 </ul>
@@ -53,7 +53,7 @@
                 <ul>
                     {% for match in matches_player2 %}
                         <li class="{% if match.vinner == username2 %}vinnerboks{% elif match.taper == username2 %}taperboks{% else %}uavgjortboks{% endif %}">
-                            {{ match["spiller2"] }} - {{ match["stilling"] }} - {{ match["spiller1"] }}
+                            {{ match["spiller2"] }} - {{ match["stilling2"] }} - {{ match["spiller1"] }}
                         </li>
                     {% endfor %}
                 </ul>
