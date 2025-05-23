@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response, Response
 import random
 import bcrypt
@@ -8,9 +10,7 @@ import os
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from flask_socketio import SocketIO, emit
-import eventlet
 
-eventlet.monkey_patch()
 
 
 load_dotenv()
@@ -660,4 +660,4 @@ def handle_start_simulation():
     print("hubbabubba")
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=3030)
+    socketio.run(app, host='0.0.0.0', debug=True, port=3030)
