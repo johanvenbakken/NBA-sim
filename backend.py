@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from flask_socketio import SocketIO, emit
 from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer
+
 
 load_dotenv()
 
