@@ -1,6 +1,6 @@
 import eventlet
 eventlet.monkey_patch()
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response, Response
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, make_response, Response, flash
 import random
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -10,8 +10,8 @@ import os
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from flask_socketio import SocketIO, emit
-
-
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
 
 load_dotenv()
 
@@ -29,6 +29,16 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'  # Hardcoded for certainty
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'apikey'  # Literally the word 'apikey'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # From .env
+app.config['MAIL_DEFAULT_SENDER'] = 'johanhven@gmail.com'
+app.config['SECURITY_PASSWORD_SALT'] = os.getenv('SECURITY_PASSWORD_SALT')
+
+mail = Mail(app)
+
 # Define User model
 class User(db.Model):
     __tablename__ = "brukere"  
@@ -36,8 +46,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     brukernavn = db.Column(db.String(50), unique=True, nullable=False)
     passord = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
+    email = db.Column(db.LargeBinary, unique=True, nullable=False)
     dato_registrert = db.Column(db.Date, nullable=False, server_default=db.func.curdate())  # Matches `curdate()`
+    email_verified = db.Column(db.Boolean, default=False)
 
 
 # Define Leaderboard model
@@ -155,6 +166,22 @@ def clear_session():
     })
     return redirect(url_for('draft'))
 
+@app.route("/send-test-email")
+def send_email():
+    try:
+        msg = Message(
+            subject="Hello from Flask + SendGrid!",
+            sender=app.config['MAIL_DEFAULT_SENDER'],
+            recipients=["jovea008@osloskolen.no"]
+        )
+        msg.body = "This is a test email sent via SendGrid."
+        mail.send(msg)
+        return "Email sent successfully!"
+    except Exception as e:
+
+
+        return f"Error sending email: {str(e)}"
+    
 @app.route('/')
 def hjemside():
     cookies_accepted = request.cookies.get('cookiesAccepted')
@@ -181,43 +208,49 @@ def signup():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        email = request.form["email"]
+        email = request.form["email"].lower().strip()  # Normalize email
 
-        # Hash password
-        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-
+        # Check if email exists (consistent encryption)
         encrypted_email = fernet.encrypt(email.encode())
- 
-        new_user = User(brukernavn=username, passord=hashed_password, email = encrypted_email)
+        if User.query.filter_by(email=encrypted_email).first():
+            flash("Email already registered", "error")
+            return redirect(url_for('signup'))
+
+        # Create user
+        new_user = User(
+            brukernavn=username,
+            passord=bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode(),
+            email=encrypted_email,
+            email_verified=False  # Explicitly set to False
+        )
         db.session.add(new_user)
-        db.session.commit()  # Save user to database
-
-        # Get newly created user ID
+        db.session.commit()
         user_id = new_user.id
-
-        # Add to Leaderboard
         new_entry = Leaderboard(user_id=user_id, antall_seire=0)
         db.session.add(new_entry)
         db.session.commit()
 
-        print("Ny bruker registrert")
-        return render_template("hjemside.html")
 
     return render_template("signup.html")
 
 
+# Updated login route:
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
-        # Example DB query (adjust as needed)
         user = User.query.filter_by(brukernavn=username).first()
 
-        if not user:
-            return "Bruker ikke funnet", 401  # User not found
-        
+        if not user or not bcrypt.checkpw(password.encode(), user.passord.encode()):
+            flash("Invalid credentials", "error")
+            return redirect(url_for('login'))
+            
+        if not user.email_verified:
+            flash("Please verify your email first", "error")
+            return redirect(url_for('login'))
+
         stored_hashed_password = user.passord
 
         if bcrypt.checkpw(password.encode(), stored_hashed_password.encode()):
