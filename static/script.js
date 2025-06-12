@@ -330,6 +330,13 @@ document.getElementById("submitBtn").addEventListener("click", function () {
     spiller4: document.getElementById("lagB_spiller4").textContent,
     spiller5: document.getElementById("lagB_spiller5").textContent,
   };
+  
+  const lastPlayer = document.getElementById("lagB_spiller5").textContent.trim();
+
+  if (!lastPlayer){
+    alert("velg alle spillere før dere fortsetter")
+    return
+  }
 
   fetch("/submit", {
     method: "POST",

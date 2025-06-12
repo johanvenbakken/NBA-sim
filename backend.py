@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 from flask_socketio import SocketIO, emit
 from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
 
 
 load_dotenv()
@@ -230,9 +231,72 @@ def signup():
         db.session.add(new_entry)
         db.session.commit()
 
+        try:
+            #lager en "serializer" som krypterer data med appens nøkkel
+            s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+            #lager en token, som inneholder epost, og en digital signatur
+            token = s.dumps(email, salt='eplepai99')
+            #Generer URL til verifiseringsisden, og _external gir en fullstendig URL (https://)
+            verify_url = url_for('verify_email', token=token, _external=True)
+
+            #oppretter meldingen som skal sendes, med sender, mottaker og body som inneholder en lenke med verifisering
+            msg = Message(
+                "Verify your email",
+                sender=app.config['MAIL_DEFAULT_SENDER'],
+                recipients=[email]
+            )
+            msg.body = f"Click to verify your email: {verify_url}"
+
+            mail.send(msg)
+            flash("email sent", "success!")
+        #hvis noe går galt, tilbakestilles database commitsene og error printes
+        except Exception as e: 
+            db.session.rollback()
+            flash(f"Error: {str(e)}", "error")
+
+
 
     return render_template("signup.html")
 
+
+#henter token fra URL
+@app.route('/verify-email/<token>')
+def verify_email(token):
+    try:
+        #lager serializer
+        s = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+        #dekrypterer token
+        email = s.loads(token, salt='eplepai99', max_age=86400)
+
+        #finner brukeren, med og sammen ligne email, med alle andre emails i databasen
+        users = User.query.all()
+        verified_user = None
+
+        for user in users:
+            decrypted_email = fernet.decrypt(user.email).decode()
+            if decrypted_email == email:
+                verified_user = user
+                break
+
+        #allerede verified
+        if verified_user:
+            if verified_user.email_verified:
+                flash("email already verified", "error")
+            #om du ikke er verified, settes det som True i databasen også comittes det
+            else:
+                verified_user.email_verified = True
+                db.session.commit()
+                flash("email verified succesfully", "success!")
+        else:
+            flash("invalid verification link", "error")
+
+    #hvis noe går galt, printes error melding, og den logges
+    except Exception as e:
+        flash("Invalid or expired verification link", "error")
+        app.logger.error(f"Verification error: {str(e)}")
+    
+    #sender deg tril login etter du har klikket på linken
+    return redirect(url_for('login'))
 
 # Updated login route:
 @app.route('/login', methods=["GET", "POST"])
@@ -244,11 +308,12 @@ def login():
         user = User.query.filter_by(brukernavn=username).first()
 
         if not user or not bcrypt.checkpw(password.encode(), user.passord.encode()):
-            flash("Invalid credentials", "error")
+            print("Invalid credentials", "error")
             return redirect(url_for('login'))
             
+        #hvis du ikke er verified, kan du ikke logge innn
         if not user.email_verified:
-            flash("Please verify your email first", "error")
+            print("Please verify your email first", "error")
             return redirect(url_for('login'))
 
         stored_hashed_password = user.passord

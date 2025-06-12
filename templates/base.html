@@ -63,10 +63,69 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
+    /* DEEPSEEK */
+    .header-container {
+        height: 30px; /* Height when collapsed */
+        overflow: hidden;
+        transition: height 0.3s ease;
+        background: #333;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .header-container:hover {
+        height: 100px; /* Height when expanded */
+    }
+
+    .dropdown-header {
+        padding: 20px;
+        color: white;
+    }
+
+    .dropdown-header nav {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .dropdown-header nav a {
+        color: white;
+        text-decoration: none;
+        margin-right: 20px;
+        padding: 5px 10px;
+    }
+
+    .dropdown-header nav a:hover {
+        background: #555;
+        border-radius: 3px;
+    }
+
 </style>
 <body>
-
+    <div class="header-container">
+        <header class="dropdown-header">
+            <nav>
+                <a href="javascript:history.back()">Tilbake</a>
+                <a href="/">Hjem</a>
+                <a href="ledertavle">Lederbord</a>
+                <a href="karriere">Karriere</a>
+            </nav>
+        </header>
+    </div>
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                <li class="{{ category }}" style="color: #ffffff;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+
         {% block content %}
         {% endblock %}
     </main>
@@ -75,7 +134,7 @@
     <footer>
         <p style="color: #5f5f5f;">&copy; NBA Simulator. Laget av <a href="https://github.com/johanvenbakken" style="color: #5f5f5f;">Johan Venbakken</a></p>
         <br>
-        <p><a href="/about" style="color: #7f7f7f;">About</a> <a href="/privacy-policy" style="color: #7f7f7f;">Privacy Policy</a> <a href="/FAQ" style="color: #7f7f7f;">FAQ</a>    <a href="mailto:johanhven@gmail.com" style="color: #7f7f7f;">Contact</a></p>
+        <p><a href="{{ url_for('static', filename='files/NBA-sim play-guide.pdf') }}" style="color: #7f7f7f;" download>Play-guide</a> <a href="/about" style="color: #7f7f7f;">About</a> <a href="/privacy-policy" style="color: #7f7f7f;">Privacy Policy</a> <a href="/FAQ" style="color: #7f7f7f;">FAQ</a>    <a href="mailto:johanhven@gmail.com" style="color: #7f7f7f;">Contact</a></p>
         <br>
         <div class="social-icons">
             <a href="https://www.instagram.com/johan_venbakken" class="fa fa-instagram"></a>
